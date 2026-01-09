@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Caretaker Dashboard</title>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h2 {
+      color: #333;
+    }
+
+    .card {
+      background: #fff;
+      padding: 16px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    input, button {
+      padding: 8px;
+      margin: 6px 0;
+      width: 100%;
+    }
+
+    button {
+      background: #1976d2;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #125aa0;
+    }
+
+    .alert {
+      background: #ffebee;
+      border-left: 5px solid red;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- LOGIN SECTION -->
+<div id="loginSection" class="card">
+  <h2>👩‍⚕️ Caretaker Login</h2>
+  <input id="email" placeholder="Email">
+  <input id="password" type="password" placeholder="Password">
+  <button onclick="login()">Login</button>
+</div>
+
+<!-- DASHBOARD SECTION -->
+<div id="dashboardSection" class="hidden">
+
+  <button onclick="logout()">Logout</button>
+
+  <h2>📋 Caretaker Dashboard</h2>
+
+  <!-- PATIENT FORM -->
+  <div class="card">
+    <h3>Add / Update Patient</h3>
+    <input id="pid" placeholder="Patient ID (e.g. patient_001)">
+    <input id="pname" placeholder="Patient Name">
+    <input id="page" placeholder="Age">
+    <input id="pcondition" placeholder="Condition">
+    <input id="pradius" placeholder="Safe Radius (meters)">
+    <button onclick="savePatient()">Save / Update Patient</button>
+  </div>
+
+  <!-- PATIENT LIST -->
+  <div class="card">
+    <h3>👥 Patient List</h3>
+    <ul id="patientList"></ul>
+  </div>
+
+  <!-- ALERTS -->
+  <div class="card">
+    <h3>🚨 Live Alerts</h3>
+    <div id="alerts"></div>
+  </div>
+
+</div>
+
+<script>
+  // 🔴 REPLACE WITH YOUR FIREBASE CONFIG
+  const firebaseConfig = {
+    apiKey: "AIzaSyAoR0vhcrxB3nw39ncqLJfmMET7ufokn1A",
+    authDomain: "ai-wandering-system.firebaseapp.com",
+    databaseURL: "https://ai-wandering-system-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "ai-wandering-system",
+    storageBucket: "ai-wandering-system.firebasestorage.app",
+    messagingSenderId: "443603981661",
+    appId: "1:443603981661:web:ce8ce7697cfbed2327c4b4",
+    measurementId: "G-2Q49NF2RTB"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+
+  const auth = firebase.auth();
+  const db = firebase.database();
+
+  // ---------------- AUTH ----------------
+
+  function login() {
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+
+    auth.signInWithEmailAndPassword(email, password)
+      .catch(err => alert(err.message));
+  }
+
+  function logout() {
+    auth.signOut();
+  }
+
+  auth.onAuthStateChanged(user => {
+    if (user) {
+      document.getElementById("loginSection").classList.add("hidden");
+      document.getElementById("dashboardSection").classList.remove("hidden");
+      loadPatients();
+      loadAlerts();
+    } else {
+      document.getElementById("loginSection").classList.remove("hidden");
+      document.getElementById("dashboardSection").classList.add("hidden");
+    }
+  });
+
+  // ---------------- PATIENT CRUD ----------------
+
+  function savePatient() {
+    const pid = document.getElementById("pid").value;
+
+    if (!pid) {
+      alert("Patient ID required");
+      return;
+    }
+
+    const data = {
+      name: document.getElementById("pname").value,
+      age: document.getElementById("page").value,
+      condition: document.getElementById("pcondition").value,
+      safeRadius: parseFloat(document.getElementById("pradius").value),
+      status: "normal"
+    };
+
+    db.ref("patients/" + pid).set(data);
+    alert("Patient saved / updated");
+  }
+
+  function loadPatients() {
+    db.ref("patients").on("value", snapshot => {
+  const list = document.getElementById("patientList");
+  list.innerHTML = "";
+
+  snapshot.forEach(child => {
+    const p = child.val();
+    const li = document.createElement("li");
+
+    const time = p.lastUpdated
+      ? new Date(p.lastUpdated).toLocaleTimeString()
+      : "N/A";
+
+    li.innerHTML = `
+  <b>${child.key}</b> - ${p.name}<br>
+  Status: <b>${p.status}</b><br>
+
+  📍 Current Location:<br>
+  ${p.currentLocation?.place || "Unknown"}<br>
+  Lat: ${p.currentLocation?.lat || "N/A"}<br>
+  Lon: ${p.currentLocation?.lon || "N/A"}<br>
+
+  🎯 Safe Center:<br>
+  Lat: ${p.safeCenter?.lat || "N/A"}<br>
+  Lon: ${p.safeCenter?.lon || "N/A"}<br>
+
+  📏 Distance: ${p.distance || 0} m<br>
+  🛑 Safe Radius: ${p.safeRadius} m<br>
+  <button onclick="setSafeCenter('${child.key}')">
+    Set Safe Center to Current Location
+  </button>
+  <hr>
+`;
+
+
+    list.appendChild(li);
+  });
+});
+  }
+
+  function setSafeCenter(patientId) {
+  const patientRef = db.ref("patients/" + patientId);
+
+  patientRef.get().then(snapshot => {
+    const data = snapshot.val();
+
+    if (!data || !data.currentLocation) {
+      alert("Current location not available");
+      return;
+    }
+
+    const center = {
+      lat: data.currentLocation.lat,
+      lon: data.currentLocation.lon
+    };
+
+    patientRef.child("safeCenter").set(center)
+      .then(() => alert("✅ Safe center updated"))
+      .catch(err => alert(err.message));
+  });
+}
+
+
+  // ---------------- ALERTS ----------------
+
+  function loadAlerts() {
+    db.ref("alerts").limitToLast(10).on("child_added", snapshot => {
+      const alert = snapshot.val();
+      const div = document.createElement("div");
+      div.className = "alert";
+
+      const date = new Date(alert.timestamp).toLocaleString();
+
+      div.innerHTML = `
+        <b>Patient:</b> ${alert.patientId}<br>
+        <b>Type:</b> ${alert.type}<br>
+        <b>Distance:</b> ${alert.distance} m<br>
+        <b>Time Outside:</b> ${alert.timeOutside} min<br>
+        <small>${date}</small>
+      `;
+
+      document.getElementById("alerts").prepend(div);
+    });
+  }
+</script>
+
+</body>
+</html>
