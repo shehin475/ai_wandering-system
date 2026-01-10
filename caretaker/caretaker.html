@@ -2,6 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Caretaker Dashboard</title>
 
   <!-- Firebase SDKs -->
@@ -10,93 +11,409 @@
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f4f6f8;
+    * {
       margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+      min-height: 100vh;
       padding: 20px;
+      color: #e0e0e0;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
     }
 
     h2 {
-      color: #333;
+      color: #00d9ff;
+      font-size: 2.2em;
+      margin-bottom: 30px;
+      text-shadow: 0 0 20px rgba(0, 217, 255, 0.5);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    h3 {
+      color: #00d9ff;
+      font-size: 1.3em;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-shadow: 0 0 10px rgba(0, 217, 255, 0.3);
     }
 
     .card {
-      background: #fff;
-      padding: 16px;
-      margin-bottom: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      background: rgba(20, 35, 45, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 30px;
+      margin-bottom: 25px;
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(0, 217, 255, 0.2);
+      transition: all 0.3s ease;
+      animation: slideIn 0.5s ease;
     }
 
-    input, button {
-      padding: 8px;
-      margin: 6px 0;
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 40px rgba(0, 217, 255, 0.3);
+      border-color: rgba(0, 217, 255, 0.4);
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    input {
+      padding: 14px 18px;
+      margin: 8px 0;
       width: 100%;
+      border: 2px solid rgba(0, 217, 255, 0.3);
+      border-radius: 10px;
+      font-size: 15px;
+      transition: all 0.3s ease;
+      background: rgba(15, 32, 39, 0.8);
+      color: #e0e0e0;
+    }
+
+    input::placeholder {
+      color: rgba(224, 224, 224, 0.5);
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #00d9ff;
+      background: rgba(15, 32, 39, 1);
+      box-shadow: 0 0 15px rgba(0, 217, 255, 0.3);
     }
 
     button {
-      background: #1976d2;
-      color: white;
+      padding: 14px 28px;
+      margin: 10px 0;
+      width: 100%;
+      background: linear-gradient(135deg, #00d9ff 0%, #0099cc 100%);
+      color: #0f2027;
       border: none;
+      border-radius: 10px;
       cursor: pointer;
+      font-size: 16px;
+      font-weight: 700;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 217, 255, 0.4);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
 
     button:hover {
-      background: #125aa0;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 217, 255, 0.6);
+      background: linear-gradient(135deg, #0099cc 0%, #00d9ff 100%);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    .logout-btn {
+      background: linear-gradient(135deg, #ff4757 0%, #cc1f2e 100%);
+      width: auto;
+      padding: 12px 30px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 15px rgba(255, 71, 87, 0.4);
+      color: white;
+    }
+
+    .logout-btn:hover {
+      background: linear-gradient(135deg, #cc1f2e 0%, #ff4757 100%);
+      box-shadow: 0 6px 20px rgba(255, 71, 87, 0.6);
     }
 
     .alert {
-      background: #ffebee;
-      border-left: 5px solid red;
-      padding: 10px;
-      margin-bottom: 10px;
+      background: linear-gradient(135deg, rgba(255, 71, 87, 0.2) 0%, rgba(204, 31, 46, 0.2) 100%);
+      border-left: 5px solid #ff4757;
+      padding: 18px;
+      margin-bottom: 15px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(255, 71, 87, 0.3);
+      animation: alertPulse 0.5s ease;
+      border: 1px solid rgba(255, 71, 87, 0.3);
+    }
+
+    @keyframes alertPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.02); }
+    }
+
+    .alert b {
+      color: #ff6b7a;
+      display: inline-block;
+      min-width: 120px;
+    }
+
+    .alert small {
+      color: #b0b0b0;
+      font-style: italic;
     }
 
     .hidden {
       display: none;
+    }
+
+    #patientList {
+      list-style: none;
+    }
+
+    #patientList li {
+      background: linear-gradient(135deg, rgba(0, 217, 255, 0.1) 0%, rgba(0, 153, 204, 0.1) 100%);
+      padding: 20px;
+      margin-bottom: 15px;
+      border-radius: 12px;
+      border-left: 5px solid #00d9ff;
+      line-height: 1.8;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(0, 217, 255, 0.2);
+    }
+
+    #patientList li:hover {
+      background: linear-gradient(135deg, rgba(0, 217, 255, 0.15) 0%, rgba(0, 153, 204, 0.15) 100%);
+      transform: translateX(5px);
+      box-shadow: 0 4px 15px rgba(0, 217, 255, 0.3);
+    }
+
+    #patientList li b {
+      color: #00d9ff;
+      font-size: 1.2em;
+      text-shadow: 0 0 10px rgba(0, 217, 255, 0.5);
+    }
+
+    #patientList li button {
+      margin-top: 15px;
+      background: linear-gradient(135deg, #00ff87 0%, #00cc6a 100%);
+      box-shadow: 0 4px 15px rgba(0, 255, 135, 0.3);
+      color: #0f2027;
+    }
+
+    #patientList li button:hover {
+      background: linear-gradient(135deg, #00cc6a 0%, #00ff87 100%);
+      box-shadow: 0 6px 20px rgba(0, 255, 135, 0.5);
+    }
+
+    #patientList hr {
+      border: none;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(0, 217, 255, 0.5), transparent);
+      margin: 15px 0 0 0;
+      box-shadow: 0 0 10px rgba(0, 217, 255, 0.3);
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.85em;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      box-shadow: 0 0 10px currentColor;
+    }
+
+    .status-normal {
+      background: rgba(0, 255, 135, 0.2);
+      color: #00ff87;
+      border: 1px solid #00ff87;
+    }
+
+    .status-warning {
+      background: rgba(255, 193, 7, 0.2);
+      color: #ffc107;
+      border: 1px solid #ffc107;
+    }
+
+    .status-alert {
+      background: rgba(255, 71, 87, 0.2);
+      color: #ff4757;
+      border: 1px solid #ff4757;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin: 15px 0;
+    }
+
+    .info-box {
+      background: rgba(0, 217, 255, 0.05);
+      padding: 15px;
+      border-radius: 10px;
+      border: 1px solid rgba(0, 217, 255, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .info-box:hover {
+      background: rgba(0, 217, 255, 0.1);
+      border-color: rgba(0, 217, 255, 0.4);
+      box-shadow: 0 0 15px rgba(0, 217, 255, 0.2);
+    }
+
+    .info-box strong {
+      color: #00d9ff;
+      display: block;
+      margin-bottom: 8px;
+      font-size: 0.95em;
+      text-shadow: 0 0 8px rgba(0, 217, 255, 0.5);
+    }
+
+    #loginSection {
+      max-width: 450px;
+      margin: 100px auto;
+    }
+
+    #loginSection h2 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .dashboard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    @media (max-width: 768px) {
+      h2 {
+        font-size: 1.8em;
+      }
+
+      .card {
+        padding: 20px;
+      }
+
+      .info-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .loading-spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(0, 217, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: #00d9ff;
+      animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px;
+      color: rgba(224, 224, 224, 0.5);
+      font-style: italic;
+    }
+
+    /* Medical cross pattern background */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        repeating-linear-gradient(0deg, transparent, transparent 49px, rgba(0, 217, 255, 0.03) 49px, rgba(0, 217, 255, 0.03) 50px),
+        repeating-linear-gradient(90deg, transparent, transparent 49px, rgba(0, 217, 255, 0.03) 49px, rgba(0, 217, 255, 0.03) 50px);
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    /* Pulse animation for critical elements */
+    @keyframes pulse {
+      0%, 100% {
+        box-shadow: 0 0 5px rgba(0, 217, 255, 0.5);
+      }
+      50% {
+        box-shadow: 0 0 20px rgba(0, 217, 255, 0.8);
+      }
+    }
+
+    .card h3::before {
+      content: '';
+      display: inline-block;
+      width: 4px;
+      height: 20px;
+      background: #00d9ff;
+      margin-right: 10px;
+      border-radius: 2px;
+      box-shadow: 0 0 10px rgba(0, 217, 255, 0.6);
     }
   </style>
 </head>
 
 <body>
 
-<!-- LOGIN SECTION -->
-<div id="loginSection" class="card">
-  <h2>👩‍⚕️ Caretaker Login</h2>
-  <input id="email" placeholder="Email">
-  <input id="password" type="password" placeholder="Password">
-  <button onclick="login()">Login</button>
-</div>
+<div class="container">
 
-<!-- DASHBOARD SECTION -->
-<div id="dashboardSection" class="hidden">
-
-  <button onclick="logout()">Logout</button>
-
-  <h2>📋 Caretaker Dashboard</h2>
-
-  <!-- PATIENT FORM -->
-  <div class="card">
-    <h3>Add / Update Patient</h3>
-    <input id="pid" placeholder="Patient ID (e.g. patient_001)">
-    <input id="pname" placeholder="Patient Name">
-    <input id="page" placeholder="Age">
-    <input id="pcondition" placeholder="Condition">
-    <input id="pradius" placeholder="Safe Radius (meters)">
-    <button onclick="savePatient()">Save / Update Patient</button>
+  <!-- LOGIN SECTION -->
+  <div id="loginSection" class="card">
+    <h2>Caretaker Login</h2>
+    <input id="email" placeholder="Email">
+    <input id="password" type="password" placeholder="Password">
+    <button onclick="login()">Login</button>
   </div>
 
-  <!-- PATIENT LIST -->
-  <div class="card">
-    <h3>👥 Patient List</h3>
-    <ul id="patientList"></ul>
-  </div>
+  <!-- DASHBOARD SECTION -->
+  <div id="dashboardSection" class="hidden">
 
-  <!-- ALERTS -->
-  <div class="card">
-    <h3>🚨 Live Alerts</h3>
-    <div id="alerts"></div>
+    <div class="dashboard-header">
+      <h2>Caretaker Dashboard</h2>
+      <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+
+    <!-- PATIENT FORM -->
+    <div class="card">
+      <h3>➕ Add / Update Patient</h3>
+      <input id="pid" placeholder="Patient ID (e.g. patient_001)">
+      <input id="pname" placeholder="Patient Name">
+      <input id="page" placeholder="Age">
+      <input id="pcondition" placeholder="Condition">
+      <input id="pradius" placeholder="Safe Radius (meters)">
+      <button onclick="savePatient()">Save / Update Patient</button>
+    </div>
+
+    <!-- PATIENT LIST -->
+    <div class="card">
+      <h3>Patient List</h3>
+      <ul id="patientList"></ul>
+    </div>
+
+    <!-- ALERTS -->
+    <div class="card">
+      <h3>Live Alerts</h3>
+      <div id="alerts"></div>
+    </div>
+
   </div>
 
 </div>
@@ -169,70 +486,88 @@
 
   function loadPatients() {
     db.ref("patients").on("value", snapshot => {
-  const list = document.getElementById("patientList");
-  list.innerHTML = "";
+      const list = document.getElementById("patientList");
+      list.innerHTML = "";
 
-  snapshot.forEach(child => {
-    const p = child.val();
-    const li = document.createElement("li");
+      if (!snapshot.exists()) {
+        list.innerHTML = '<div class="empty-state">No patients added yet</div>';
+        return;
+      }
 
-    const time = p.lastUpdated
-      ? new Date(p.lastUpdated).toLocaleTimeString()
-      : "N/A";
+      snapshot.forEach(child => {
+        const p = child.val();
+        const li = document.createElement("li");
 
-    li.innerHTML = `
-  <b>${child.key}</b> - ${p.name}<br>
-  Status: <b>${p.status}</b><br>
+        const time = p.lastUpdated
+          ? new Date(p.lastUpdated).toLocaleTimeString()
+          : "N/A";
 
-  📍 Current Location:<br>
-  ${p.currentLocation?.place || "Unknown"}<br>
-  Lat: ${p.currentLocation?.lat || "N/A"}<br>
-  Lon: ${p.currentLocation?.lon || "N/A"}<br>
+        const statusClass = p.status === 'normal' ? 'status-normal' : 
+                           p.status === 'warning' ? 'status-warning' : 'status-alert';
 
-  🎯 Safe Center:<br>
-  Lat: ${p.safeCenter?.lat || "N/A"}<br>
-  Lon: ${p.safeCenter?.lon || "N/A"}<br>
+        li.innerHTML = `
+          <b>${child.key}</b> - ${p.name}<br>
+          Status: <span class="status-badge ${statusClass}">${p.status}</span><br><br>
 
-  📏 Distance: ${p.distance || 0} m<br>
-  🛑 Safe Radius: ${p.safeRadius} m<br>
-  <button onclick="setSafeCenter('${child.key}')">
-    Set Safe Center to Current Location
-  </button>
-  <hr>
-`;
+          <div class="info-grid">
+            <div class="info-box">
+              <strong>📍 Current Location</strong>
+              ${p.currentLocation?.place || "Unknown"}<br>
+              Lat: ${p.currentLocation?.lat || "N/A"}<br>
+              Lon: ${p.currentLocation?.lon || "N/A"}
+            </div>
 
+            <div class="info-box">
+              <strong>🎯 Safe Center</strong>
+              Lat: ${p.safeCenter?.lat || "N/A"}<br>
+              Lon: ${p.safeCenter?.lon || "N/A"}
+            </div>
 
-    list.appendChild(li);
-  });
-});
+            <div class="info-box">
+              <strong>📏 Metrics</strong>
+              Distance: ${p.distance || 0} m<br>
+              Safe Radius: ${p.safeRadius} m
+            </div>
+          </div>
+
+          <button onclick="setSafeCenter('${child.key}')">
+            Set Safe Center to Current Location
+          </button>
+          <hr>
+        `;
+
+        list.appendChild(li);
+      });
+    });
   }
 
   function setSafeCenter(patientId) {
-  const patientRef = db.ref("patients/" + patientId);
+    const patientRef = db.ref("patients/" + patientId);
 
-  patientRef.get().then(snapshot => {
-    const data = snapshot.val();
+    patientRef.get().then(snapshot => {
+      const data = snapshot.val();
 
-    if (!data || !data.currentLocation) {
-      alert("Current location not available");
-      return;
-    }
+      if (!data || !data.currentLocation) {
+        alert("Current location not available");
+        return;
+      }
 
-    const center = {
-      lat: data.currentLocation.lat,
-      lon: data.currentLocation.lon
-    };
+      const center = {
+        lat: data.currentLocation.lat,
+        lon: data.currentLocation.lon
+      };
 
-    patientRef.child("safeCenter").set(center)
-      .then(() => alert("✅ Safe center updated"))
-      .catch(err => alert(err.message));
-  });
-}
-
+      patientRef.child("safeCenter").set(center)
+        .then(() => alert("✅ Safe center updated"))
+        .catch(err => alert(err.message));
+    });
+  }
 
   // ---------------- ALERTS ----------------
 
   function loadAlerts() {
+    const alertsDiv = document.getElementById("alerts");
+    
     db.ref("alerts").limitToLast(10).on("child_added", snapshot => {
       const alert = snapshot.val();
       const div = document.createElement("div");
@@ -248,8 +583,15 @@
         <small>${date}</small>
       `;
 
-      document.getElementById("alerts").prepend(div);
+      alertsDiv.prepend(div);
     });
+
+    // Check if no alerts initially
+    setTimeout(() => {
+      if (alertsDiv.children.length === 0) {
+        alertsDiv.innerHTML = '<div class="empty-state">No alerts yet</div>';
+      }
+    }, 1000);
   }
 </script>
 
