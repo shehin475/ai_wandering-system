@@ -1,6 +1,6 @@
-numpy
-pandas
-scikit-learn
 flask
 joblib
+numpy
 requests
+google-auth
+google-auth-oauthlib
