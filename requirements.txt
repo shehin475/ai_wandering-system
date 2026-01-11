@@ -6,3 +6,4 @@ google-auth
 scikit-learn
 google-auth-oauthlib
 dotenv
+pandas

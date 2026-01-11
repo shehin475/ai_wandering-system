@@ -3,6 +3,8 @@ import joblib
 import numpy as np
 import requests
 import json
+import pandas as pd
+
 
 from google.oauth2 import service_account
 from google.auth.transport.requests import Request
@@ -75,7 +77,12 @@ def predict():
     time_outside = data["time_outside"]
     patient_id = data["patientId"]
 
-    X = np.array([[speed, distance, time_outside]])
+    X = pd.DataFrame([{
+      "speed": speed,
+      "distance": distance,
+      "time_outside": time_outside
+    }])
+
     prediction = model.predict(X)[0]
 
     result = "wandering" if prediction == 1 else "normal"
