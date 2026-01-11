@@ -19,7 +19,7 @@ app = Flask(__name__)
 model = joblib.load("wandering_model.pkl")
 
 # ---------------- FIREBASE CONFIG ----------------
-FIREBASE_DB_URL = "https://ai-wandering-system.firebaseio.com"
+FIREBASE_DB_URL = "https://console.firebase.google.com/project/ai-wandering-system/database/ai-wandering-system-default-rtdb/data/~2F"
 import os
 
 PROJECT_ID = os.getenv("FIREBASE_PROJECT_ID")
