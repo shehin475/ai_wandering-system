@@ -78,9 +78,9 @@ def predict():
     patient_id = data["patientId"]
 
     X = pd.DataFrame([{
-      "speed": speed,
-      "distance": distance,
-      "time_outside": time_outside
+    "speed": speed,
+    "distance_from_home": distance,
+    "time_outside": time_outside
     }])
 
     prediction = model.predict(X)[0]
