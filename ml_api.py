@@ -36,6 +36,7 @@ def get_access_token():
 
 # ---------------- SEND PUSH (HTTP v1) ----------------
 def send_push(token, title, body):
+    print("Send push reached")
     access_token = get_access_token()
 
     url = f"https://fcm.googleapis.com/v1/projects/{PROJECT_ID}/messages:send"
@@ -66,6 +67,7 @@ def send_push(token, title, body):
 # ---------------- ML PREDICTION API ----------------
 @app.route("/predict", methods=["POST"])
 def predict():
+    print("PREDICT API HIT:", request.json)
     data = request.json
 
     speed = data["speed"]
@@ -77,11 +79,16 @@ def predict():
     prediction = model.predict(X)[0]
 
     result = "wandering" if prediction == 1 else "normal"
+    print("ML INPUT:", speed, distance, time_outside)
+    print("ML RESULT:", result)
+
 
     # 🚨 IF WANDERING → SEND PUSH
     if result == "wandering":
         firebase_url = f"{FIREBASE_DB_URL}/patients/{patient_id}.json"
         patient_data = requests.get(firebase_url).json()
+        print("FCM TOKEN:", patient_data.get("fcmToken"))
+
 
         if patient_data and "fcmToken" in patient_data:
             send_push(
