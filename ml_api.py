@@ -94,6 +94,7 @@ def predict():
     if result == "wandering":
         firebase_url = f"{FIREBASE_DB_URL}/patients/{patient_id}.json"
         patient_data = requests.get(firebase_url).json()
+        print("RAW PATIENT DATA:", patient_data, flush=True)
         print("FCM TOKEN:", patient_data.get("fcmToken") ,flush=True)
 
 
