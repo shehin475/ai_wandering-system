@@ -7,6 +7,10 @@ import json
 from google.oauth2 import service_account
 from google.auth.transport.requests import Request
 
+from dotenv import load_dotenv
+load_dotenv()
+
+
 app = Flask(__name__)
 
 # ---------------- LOAD ML MODEL ----------------
@@ -14,8 +18,11 @@ model = joblib.load("wandering_model.pkl")
 
 # ---------------- FIREBASE CONFIG ----------------
 FIREBASE_DB_URL = "https://ai-wandering-system.firebaseio.com"
-SERVICE_ACCOUNT_FILE = "service-account.json"
-PROJECT_ID = "ai-wandering-system"
+import os
+
+SERVICE_ACCOUNT_FILE = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
+PROJECT_ID = os.getenv("FIREBASE_PROJECT_ID")
+
 
 # ---------------- FCM HTTP v1 TOKEN ----------------
 def get_access_token():
