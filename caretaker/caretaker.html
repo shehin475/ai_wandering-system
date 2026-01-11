@@ -393,7 +393,7 @@
 
     <!-- PATIENT FORM -->
     <div class="card">
-      <h3>➕ Add / Update Patient</h3>
+      <h3> Add / Update Patient</h3>
       <input id="pid" placeholder="Patient ID (e.g. patient_001)">
       <input id="pname" placeholder="Patient Name">
       <input id="page" placeholder="Age">
@@ -411,12 +411,17 @@
     <!-- ALERTS -->
     <div class="card">
       <h3>Live Alerts</h3>
+      <button id="enableSoundBtn">🔔 Enable Alert Sound</button>
       <div id="alerts"></div>
     </div>
 
   </div>
 
 </div>
+
+<audio id="alertSound">
+  <source src="https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg">
+</audio>
 
 <script>
   // 🔴 REPLACE WITH YOUR FIREBASE CONFIG
@@ -455,7 +460,6 @@
       document.getElementById("loginSection").classList.add("hidden");
       document.getElementById("dashboardSection").classList.remove("hidden");
       loadPatients();
-      loadAlerts();
     } else {
       document.getElementById("loginSection").classList.remove("hidden");
       document.getElementById("dashboardSection").classList.add("hidden");
@@ -565,34 +569,77 @@
 
   // ---------------- ALERTS ----------------
 
-  function loadAlerts() {
-    const alertsDiv = document.getElementById("alerts");
-    
-    db.ref("alerts").limitToLast(10).on("child_added", snapshot => {
-      const alert = snapshot.val();
-      const div = document.createElement("div");
-      div.className = "alert";
+  let soundEnabled = false;
+  const alertSound = document.getElementById("alertSound");
 
-      const date = new Date(alert.timestamp).toLocaleString();
-
-      div.innerHTML = `
-        <b>Patient:</b> ${alert.patientId}<br>
-        <b>Type:</b> ${alert.type}<br>
-        <b>Distance:</b> ${alert.distance} m<br>
-        <b>Time Outside:</b> ${alert.timeOutside} min<br>
-        <small>${date}</small>
-      `;
-
-      alertsDiv.prepend(div);
+  document.getElementById("enableSoundBtn").addEventListener("click", () => {
+    alertSound.play().then(() => {
+      alertSound.pause();
+      alertSound.currentTime = 0;
+      soundEnabled = true;
+      alert("Alert sound enabled");
+    }).catch(err => {
+      console.error("Audio unlock failed", err);
     });
+  });
 
-    // Check if no alerts initially
-    setTimeout(() => {
-      if (alertsDiv.children.length === 0) {
-        alertsDiv.innerHTML = '<div class="empty-state">No alerts yet</div>';
-      }
-    }, 1000);
+    const alertsDiv = document.getElementById("alerts");
+
+  db.ref("alerts").on("child_added", snapshot => {
+    const alert = snapshot.val();
+    const alertId = snapshot.key;
+
+    // Prevent duplicate UI
+    if (document.getElementById(alertId)) return;
+
+    if (soundEnabled) {
+      alertSound.play();
+    }
+
+    const div = document.createElement("div");
+    div.className = "alert";
+    div.id = alertId;
+
+    div.innerHTML = `
+      <b>🚨 Wandering Alert</b><br>
+      <b>Patient:</b> ${alert.patientId}<br>
+      <b>Distance:</b> ${alert.distance} m<br>
+      <b>Time Outside:</b> ${alert.timeOutside} min<br>
+      <small>${new Date(alert.timestamp).toLocaleString()}</small><br><br>
+      <button class="ack-btn" onclick="markAlertSeen('${alertId}')">
+        Mark as Seen
+      </button>
+    `;
+
+    alertsDiv.prepend(div);
+  });
+
+  // Remove alert UI when deleted in Firebase
+  db.ref("alerts").on("child_removed", snapshot => {
+    const el = document.getElementById(snapshot.key);
+    if (el) el.remove();
+  });
+
+  function markAlertSeen(alertId) {
+    db.ref("alerts").child(alertId).remove();
   }
+  // ---------------- AUTO CLEANUP (5 MIN BACKUP) ----------------
+
+  function cleanOldAlerts() {
+    const now = Date.now();
+    const limit = 5 * 60 * 1000;
+
+    db.ref("alerts").once("value", snap => {
+      snap.forEach(child => {
+        const a = child.val();
+        if (a.timestamp && now - a.timestamp > limit) {
+          db.ref("alerts").child(child.key).remove();
+        }
+      });
+    });
+  }
+
+  setInterval(cleanOldAlerts, 60 * 1000);
 </script>
 
 </body>
