@@ -20,14 +20,15 @@ model = joblib.load("wandering_model.pkl")
 FIREBASE_DB_URL = "https://ai-wandering-system.firebaseio.com"
 import os
 
-SERVICE_ACCOUNT_FILE = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
 PROJECT_ID = os.getenv("FIREBASE_PROJECT_ID")
 
 
 # ---------------- FCM HTTP v1 TOKEN ----------------
 def get_access_token():
-    credentials = service_account.Credentials.from_service_account_file(
-        SERVICE_ACCOUNT_FILE,
+    sa_info = json.loads(os.getenv("GOOGLE_APPLICATION_CREDENTIALS"))
+
+    credentials = service_account.Credentials.from_service_account_info(
+        sa_info,
         scopes=["https://www.googleapis.com/auth/firebase.messaging"]
     )
     credentials.refresh(Request())
