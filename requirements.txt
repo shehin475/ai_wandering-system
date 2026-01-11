@@ -3,5 +3,6 @@ joblib
 numpy
 requests
 google-auth
+scikt-learn
 google-auth-oauthlib
 dotenv
