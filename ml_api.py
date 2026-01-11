@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 import joblib
 import numpy as np
 import requests
@@ -13,7 +13,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder="static")
 
 # ---------------- LOAD ML MODEL ----------------
 model = joblib.load("wandering_model.pkl")
@@ -109,8 +109,9 @@ def predict():
 
 # ---------------- HEALTH CHECK ----------------
 @app.route("/")
-def home():
-    return "AI Wandering Detection ML API Running (FCM HTTP v1)"
+def caretaker_dashboard():
+    return send_from_directory("static", "caretaker.html")
+
 
 # ---------------- RUN SERVER ----------------
 if __name__ == "__main__":

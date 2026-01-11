@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Caretaker Dashboard - Medical Monitoring</title>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #0d1b2a 0%, #1b263b 50%, #415a77 100%);
+      min-height: 100vh;
+      padding: 20px;
+      color: #e0e1dd;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    h2 {
+      color: #fff;
+      font-size: 2.2em;
+      margin-bottom: 30px;
+      position: relative;
+      padding-left: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    h2::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 6px;
+      background: linear-gradient(to bottom, #4cc9f0, #4361ee);
+      border-radius: 3px;
+      box-shadow: 0 0 15px rgba(76, 201, 240, 0.5);
+    }
+
+    h3 {
+      color: #fff;
+      font-size: 1.4em;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      position: relative;
+      padding-bottom: 10px;
+    }
+
+    h3::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(to right, #4cc9f0, #4361ee);
+      border-radius: 3px;
+    }
+
+    .card {
+      background: rgba(26, 35, 53, 0.85);
+      backdrop-filter: blur(15px);
+      padding: 30px;
+      margin-bottom: 25px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(76, 201, 240, 0.15);
+      transition: all 0.3s ease;
+      animation: slideIn 0.5s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(to right, #4cc9f0, #4361ee, #7209b7);
+      border-radius: 20px 20px 0 0;
+    }
+
+    .card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+      border-color: rgba(76, 201, 240, 0.3);
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    input {
+      padding: 16px 20px;
+      margin: 10px 0;
+      width: 100%;
+      border: 2px solid rgba(76, 201, 240, 0.2);
+      border-radius: 12px;
+      font-size: 16px;
+      transition: all 0.3s ease;
+      background: rgba(13, 27, 42, 0.7);
+      color: #e0e1dd;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    input::placeholder {
+      color: rgba(224, 225, 221, 0.5);
+      font-style: italic;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #4cc9f0;
+      background: rgba(13, 27, 42, 0.9);
+      box-shadow: 0 0 0 3px rgba(76, 201, 240, 0.2);
+    }
+
+    button {
+      padding: 16px 32px;
+      margin: 12px 0;
+      width: 100%;
+      background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 20px rgba(67, 97, 238, 0.3);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      position: relative;
+      overflow: hidden;
+    }
+
+    button::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 5px;
+      height: 5px;
+      background: rgba(255, 255, 255, 0.5);
+      opacity: 0;
+      border-radius: 100%;
+      transform: scale(1, 1) translate(-50%);
+      transform-origin: 50% 50%;
+    }
+
+    button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(67, 97, 238, 0.4);
+      background: linear-gradient(135deg, #3a0ca3 0%, #4361ee 100%);
+    }
+
+    button:active::after {
+      animation: ripple 1s ease-out;
+    }
+
+    @keyframes ripple {
+      0% {
+        transform: scale(0, 0);
+        opacity: 0.5;
+      }
+      100% {
+        transform: scale(20, 20);
+        opacity: 0;
+      }
+    }
+
+    .logout-btn {
+      background: linear-gradient(135deg, #f72585 0%, #b5179e 100%);
+      width: auto;
+      padding: 14px 32px;
+      margin-bottom: 20px;
+      box-shadow: 0 5px 20px rgba(247, 37, 133, 0.3);
+      border-radius: 12px;
+    }
+
+    .logout-btn:hover {
+      background: linear-gradient(135deg, #b5179e 0%, #f72585 100%);
+      box-shadow: 0 8px 25px rgba(247, 37, 133, 0.4);
+    }
+
+    .alert {
+      background: linear-gradient(135deg, rgba(247, 37, 133, 0.1) 0%, rgba(181, 23, 158, 0.1) 100%);
+      border-left: 5px solid #f72585;
+      padding: 20px;
+      margin-bottom: 18px;
+      border-radius: 12px;
+      box-shadow: 0 5px 15px rgba(247, 37, 133, 0.2);
+      animation: alertPulse 2s infinite;
+      border: 1px solid rgba(247, 37, 133, 0.2);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .alert::before {
+      content: '⚠️';
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 24px;
+      opacity: 0.2;
+    }
+
+    @keyframes alertPulse {
+      0%, 100% { 
+        box-shadow: 0 5px 15px rgba(247, 37, 133, 0.2);
+      }
+      50% { 
+        box-shadow: 0 5px 20px rgba(247, 37, 133, 0.4);
+      }
+    }
+
+    .alert b {
+      color: #f72585;
+      display: inline-block;
+      min-width: 120px;
+    }
+
+    .alert small {
+      color: #b0b0b0;
+      font-style: italic;
+      display: block;
+      margin-top: 5px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    #patientList {
+      list-style: none;
+    }
+
+    #patientList li {
+      background: linear-gradient(135deg, rgba(67, 97, 238, 0.08) 0%, rgba(76, 201, 240, 0.08) 100%);
+      padding: 24px;
+      margin-bottom: 18px;
+      border-radius: 16px;
+      border-left: 6px solid #4361ee;
+      line-height: 1.8;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(67, 97, 238, 0.15);
+      position: relative;
+    }
+
+    #patientList li::before {
+      content: '👤';
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      font-size: 24px;
+      opacity: 0.3;
+    }
+
+    #patientList li:hover {
+      background: linear-gradient(135deg, rgba(67, 97, 238, 0.12) 0%, rgba(76, 201, 240, 0.12) 100%);
+      transform: translateX(8px);
+      box-shadow: 0 8px 20px rgba(67, 97, 238, 0.2);
+    }
+
+    #patientList li b {
+      color: #4cc9f0;
+      font-size: 1.3em;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    #patientList li button {
+      margin-top: 18px;
+      background: linear-gradient(135deg, #4cc9f0 0%, #4895ef 100%);
+      box-shadow: 0 5px 20px rgba(76, 201, 240, 0.3);
+      color: #0d1b2a;
+      font-weight: 700;
+    }
+
+    #patientList li button:hover {
+      background: linear-gradient(135deg, #4895ef 0%, #4cc9f0 100%);
+      box-shadow: 0 8px 25px rgba(76, 201, 240, 0.4);
+    }
+
+    #patientList hr {
+      border: none;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(76, 201, 240, 0.3), transparent);
+      margin: 20px 0 0 0;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 8px 18px;
+      border-radius: 20px;
+      font-size: 0.85em;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+      margin: 5px 0;
+    }
+
+    .status-normal {
+      background: rgba(76, 201, 240, 0.15);
+      color: #4cc9f0;
+      border: 2px solid #4cc9f0;
+    }
+
+    .status-warning {
+      background: rgba(255, 183, 3, 0.15);
+      color: #ffb703;
+      border: 2px solid #ffb703;
+    }
+
+    .status-alert {
+      background: rgba(247, 37, 133, 0.15);
+      color: #f72585;
+      border: 2px solid #f72585;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { 
+        box-shadow: 0 0 10px rgba(247, 37, 133, 0.3);
+      }
+      50% { 
+        box-shadow: 0 0 20px rgba(247, 37, 133, 0.6);
+      }
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 18px;
+      margin: 18px 0;
+    }
+
+    .info-box {
+      background: rgba(76, 201, 240, 0.07);
+      padding: 18px;
+      border-radius: 12px;
+      border: 1px solid rgba(76, 201, 240, 0.15);
+      transition: all 0.3s ease;
+    }
+
+    .info-box:hover {
+      background: rgba(76, 201, 240, 0.12);
+      border-color: rgba(76, 201, 240, 0.3);
+      box-shadow: 0 5px 15px rgba(76, 201, 240, 0.15);
+      transform: translateY(-3px);
+    }
+
+    .info-box strong {
+      color: #4cc9f0;
+      display: block;
+      margin-bottom: 10px;
+      font-size: 1em;
+      font-weight: 600;
+    }
+
+    #loginSection {
+      max-width: 480px;
+      margin: 100px auto;
+      text-align: center;
+    }
+
+    #loginSection h2 {
+      justify-content: center;
+      padding-left: 0;
+    }
+
+    #loginSection h2::before {
+      display: none;
+    }
+
+    .dashboard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+      gap: 20px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(76, 201, 240, 0.2);
+    }
+
+    @media (max-width: 768px) {
+      h2 {
+        font-size: 1.8em;
+      }
+
+      h3 {
+        font-size: 1.2em;
+      }
+
+      .card {
+        padding: 24px;
+      }
+
+      .info-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .dashboard-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .logout-btn {
+        align-self: flex-end;
+      }
+    }
+
+    .loading-spinner {
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      border: 3px solid rgba(76, 201, 240, 0.3);
+      border-radius: 50%;
+      border-top-color: #4cc9f0;
+      animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 50px 20px;
+      color: rgba(224, 225, 221, 0.5);
+      font-style: italic;
+      font-size: 1.1em;
+    }
+
+    /* Medical cross pattern background */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        radial-gradient(circle at 25% 25%, rgba(76, 201, 240, 0.03) 2px, transparent 2px),
+        radial-gradient(circle at 75% 75%, rgba(76, 201, 240, 0.03) 2px, transparent 2px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    /* Medical cross icon for headers */
+    .medical-icon {
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      background: linear-gradient(135deg, #4cc9f0, #4361ee);
+      mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z'/%3E%3C/svg%3E");
+      -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z'/%3E%3C/svg%3E");
+      mask-repeat: no-repeat;
+      -webkit-mask-repeat: no-repeat;
+      mask-position: center;
+      -webkit-mask-position: center;
+    }
+
+    /* Floating particles */
+    .particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .particle {
+      position: absolute;
+      background: rgba(76, 201, 240, 0.1);
+      border-radius: 50%;
+      animation: float 20s infinite linear;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(0) translateX(0);
+      }
+      25% {
+        transform: translateY(-20px) translateX(10px);
+      }
+      50% {
+        transform: translateY(10px) translateX(-10px);
+      }
+      75% {
+        transform: translateY(-10px) translateX(20px);
+      }
+      100% {
+        transform: translateY(0) translateX(0);
+      }
+    }
+
+    /* Card labels */
+    .card-label {
+      position: absolute;
+      top: 12px;
+      right: 20px;
+      font-size: 0.8em;
+      color: rgba(76, 201, 240, 0.7);
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    /* Enable sound button */
+    #enableSoundBtn {
+      background: linear-gradient(135deg, #7209b7 0%, #560bad 100%);
+      margin-bottom: 25px;
+    }
+    
+    #enableSoundBtn:hover {
+      background: linear-gradient(135deg, #560bad 0%, #7209b7 100%);
+    }
+
+    /* Acknowledge button in alerts */
+    .ack-btn {
+      background: linear-gradient(135deg, #4cc9f0 0%, #4361ee 100%);
+      width: auto;
+      padding: 12px 24px;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+    
+    .ack-btn:hover {
+      background: linear-gradient(135deg, #4361ee 0%, #4cc9f0 100%);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Floating particles for background -->
+  <div class="particles" id="particles"></div>
+
+  <div class="container">
+
+    <!-- LOGIN SECTION -->
+    <div id="loginSection" class="card">
+      <h2><span class="medical-icon"></span> Caretaker Login</h2>
+      <input id="email" placeholder="Email">
+      <input id="password" type="password" placeholder="Password">
+      <button onclick="login()">Login</button>
+    </div>
+
+    <!-- DASHBOARD SECTION -->
+    <div id="dashboardSection" class="hidden">
+
+      <div class="dashboard-header">
+        <h2><span class="medical-icon"></span> Caretaker Dashboard</h2>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+      </div>
+
+      <!-- PATIENT FORM -->
+      <div class="card">
+        <span class="card-label">Patient Management</span>
+        <h3><span class="medical-icon"></span> Add / Update Patient</h3>
+        <input id="pid" placeholder="Patient ID (e.g. patient_001)">
+        <input id="pname" placeholder="Patient Name">
+        <input id="page" placeholder="Age">
+        <input id="pcondition" placeholder="Condition">
+        <input id="pradius" placeholder="Safe Radius (meters)">
+        <button onclick="savePatient()">Save / Update Patient</button>
+      </div>
+
+      <!-- PATIENT LIST -->
+      <div class="card">
+        <span class="card-label">Monitoring</span>
+        <h3><span class="medical-icon"></span> Patient List</h3>
+        <ul id="patientList"></ul>
+      </div>
+
+      <!-- ALERTS -->
+      <div class="card">
+        <span class="card-label">Alerts</span>
+        <h3><span class="medical-icon"></span> Live Alerts</h3>
+        <button id="enableSoundBtn">🔔 Enable Alert Sound</button>
+        <div id="alerts"></div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <audio id="alertSound">
+    <source src="https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg">
+  </audio>
+
+  <script>
+    // 🔴 REPLACE WITH YOUR FIREBASE CONFIG
+    const firebaseConfig = {
+      apiKey: "AIzaSyAoR0vhcrxB3nw39ncqLJfmMET7ufokn1A",
+      authDomain: "ai-wandering-system.firebaseapp.com",
+      databaseURL: "https://ai-wandering-system-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "ai-wandering-system",
+      storageBucket: "ai-wandering-system.firebasestorage.app",
+      messagingSenderId: "443603981661",
+      appId: "1:443603981661:web:ce8ce7697cfbed2327c4b4",
+      measurementId: "G-2Q49NF2RTB"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+
+    const auth = firebase.auth();
+    const db = firebase.database();
+
+    // Create floating particles
+    function createParticles() {
+      const particlesContainer = document.getElementById('particles');
+      for (let i = 0; i < 20; i++) {
+        const particle = document.createElement('div');
+        particle.classList.add('particle');
+        const size = Math.random() * 6 + 2;
+        const posX = Math.random() * 100;
+        const posY = Math.random() * 100;
+        const delay = Math.random() * 20;
+        
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        particle.style.left = `${posX}%`;
+        particle.style.top = `${posY}%`;
+        particle.style.animationDelay = `${delay}s`;
+        
+        particlesContainer.appendChild(particle);
+      }
+    }
+
+    // Initialize particles on load
+    window.addEventListener('load', createParticles);
+
+    // ---------------- AUTH ----------------
+
+    function login() {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      // Add loading state to button
+      const loginBtn = document.querySelector('#loginSection button');
+      const originalText = loginBtn.textContent;
+      loginBtn.innerHTML = '<span class="loading-spinner"></span> Authenticating...';
+      loginBtn.disabled = true;
+
+      auth.signInWithEmailAndPassword(email, password)
+        .catch(err => {
+          alert(err.message);
+          loginBtn.textContent = originalText;
+          loginBtn.disabled = false;
+        });
+    }
+
+    function logout() {
+      const logoutBtn = document.querySelector('.logout-btn');
+      const originalText = logoutBtn.textContent;
+      logoutBtn.innerHTML = '<span class="loading-spinner"></span> Logging out...';
+      logoutBtn.disabled = true;
+      
+      setTimeout(() => {
+        auth.signOut();
+      }, 500);
+    }
+
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        document.getElementById("loginSection").classList.add("hidden");
+        document.getElementById("dashboardSection").classList.remove("hidden");
+        loadPatients();
+      } else {
+        document.getElementById("loginSection").classList.remove("hidden");
+        document.getElementById("dashboardSection").classList.add("hidden");
+      }
+      
+      // Reset button states
+      const loginBtn = document.querySelector('#loginSection button');
+      if (loginBtn) {
+        loginBtn.textContent = 'Login';
+        loginBtn.disabled = false;
+      }
+      
+      const logoutBtn = document.querySelector('.logout-btn');
+      if (logoutBtn) {
+        logoutBtn.textContent = 'Logout';
+        logoutBtn.disabled = false;
+      }
+    });
+
+    // ---------------- PATIENT CRUD ----------------
+
+    function savePatient() {
+      const pid = document.getElementById("pid").value;
+
+      if (!pid) {
+        alert("Patient ID required");
+        return;
+      }
+
+      const data = {
+        name: document.getElementById("pname").value,
+        age: document.getElementById("page").value,
+        condition: document.getElementById("pcondition").value,
+        safeRadius: parseFloat(document.getElementById("pradius").value),
+        status: "normal"
+      };
+
+      const saveBtn = document.querySelector('.card:first-of-type button');
+      const originalText = saveBtn.textContent;
+      saveBtn.innerHTML = '<span class="loading-spinner"></span> Saving...';
+      saveBtn.disabled = true;
+
+      db.ref("patients/" + pid).set(data)
+        .then(() => {
+          alert("Patient saved / updated");
+          saveBtn.textContent = originalText;
+          saveBtn.disabled = false;
+          
+          // Clear form
+          document.getElementById("pid").value = '';
+          document.getElementById("pname").value = '';
+          document.getElementById("page").value = '';
+          document.getElementById("pcondition").value = '';
+          document.getElementById("pradius").value = '';
+        })
+        .catch(err => {
+          alert(err.message);
+          saveBtn.textContent = originalText;
+          saveBtn.disabled = false;
+        });
+    }
+
+    function loadPatients() {
+      db.ref("patients").on("value", snapshot => {
+        const list = document.getElementById("patientList");
+        list.innerHTML = "";
+
+        if (!snapshot.exists()) {
+          list.innerHTML = '<div class="empty-state">No patients added yet. Add a patient to begin monitoring.</div>';
+          return;
+        }
+
+        snapshot.forEach(child => {
+          const p = child.val();
+          const li = document.createElement("li");
+
+          const time = p.lastUpdated
+            ? new Date(p.lastUpdated).toLocaleTimeString()
+            : "N/A";
+
+          const statusClass = p.status === 'normal' ? 'status-normal' : 
+                             p.status === 'warning' ? 'status-warning' : 'status-alert';
+
+          li.innerHTML = `
+            <b>${child.key}</b> - ${p.name} (Age: ${p.age})<br>
+            Condition: ${p.condition}<br>
+            Status: <span class="status-badge ${statusClass}">${p.status}</span><br>
+
+            <div class="info-grid">
+              <div class="info-box">
+                <strong>📍 Current Location</strong>
+                ${p.currentLocation?.place || "Unknown"}<br>
+                Lat: ${p.currentLocation?.lat || "N/A"}<br>
+                Lon: ${p.currentLocation?.lon || "N/A"}
+              </div>
+
+              <div class="info-box">
+                <strong>🎯 Safe Center</strong>
+                Lat: ${p.safeCenter?.lat || "N/A"}<br>
+                Lon: ${p.safeCenter?.lon || "N/A"}
+              </div>
+
+              <div class="info-box">
+                <strong>📏 Safety Metrics</strong>
+                Distance: ${p.distance || 0} m<br>
+                Safe Radius: ${p.safeRadius} m
+              </div>
+            </div>
+
+            <button onclick="setSafeCenter('${child.key}')">
+              Set Safe Center to Current Location
+            </button>
+            <hr>
+          `;
+
+          list.appendChild(li);
+        });
+      });
+    }
+
+    function setSafeCenter(patientId) {
+      const patientRef = db.ref("patients/" + patientId);
+
+      patientRef.get().then(snapshot => {
+        const data = snapshot.val();
+
+        if (!data || !data.currentLocation) {
+          alert("Current location not available");
+          return;
+        }
+
+        const center = {
+          lat: data.currentLocation.lat,
+          lon: data.currentLocation.lon
+        };
+
+        patientRef.child("safeCenter").set(center)
+          .then(() => alert("✅ Safe center updated"))
+          .catch(err => alert(err.message));
+      });
+    }
+
+    // ---------------- ALERTS ----------------
+
+    let soundEnabled = false;
+    const alertSound = document.getElementById("alertSound");
+
+    document.getElementById("enableSoundBtn").addEventListener("click", () => {
+      const btn = document.getElementById("enableSoundBtn");
+      const originalText = btn.textContent;
+      btn.innerHTML = '<span class="loading-spinner"></span> Enabling...';
+      btn.disabled = true;
+      
+      alertSound.play().then(() => {
+        alertSound.pause();
+        alertSound.currentTime = 0;
+        soundEnabled = true;
+        btn.textContent = '✅ Alert Sound Enabled';
+        btn.style.background = 'linear-gradient(135deg, #4cc9f0 0%, #4361ee 100%)';
+        setTimeout(() => {
+          btn.textContent = originalText;
+          btn.disabled = false;
+        }, 2000);
+      }).catch(err => {
+        console.error("Audio unlock failed", err);
+        btn.textContent = '❌ Enable Failed - Click Again';
+        btn.disabled = false;
+      });
+    });
+
+    const alertsDiv = document.getElementById("alerts");
+
+    db.ref("alerts").on("child_added", snapshot => {
+      const alert = snapshot.val();
+      const alertId = snapshot.key;
+
+      // Prevent duplicate UI
+      if (document.getElementById(alertId)) return;
+
+      if (soundEnabled) {
+        alertSound.play();
+      }
+
+      const div = document.createElement("div");
+      div.className = "alert";
+      div.id = alertId;
+
+      div.innerHTML = `
+        <b>🚨 WANDERING ALERT</b><br>
+        <b>Patient:</b> ${alert.patientId}<br>
+        <b>Distance:</b> ${alert.distance} m<br>
+        <b>Time Outside:</b> ${alert.timeOutside} min<br>
+        <small>${new Date(alert.timestamp).toLocaleString()}</small><br><br>
+        <button class="ack-btn" onclick="markAlertSeen('${alertId}')">
+          Acknowledge Alert
+        </button>
+      `;
+
+      alertsDiv.prepend(div);
+    });
+
+    // Remove alert UI when deleted in Firebase
+    db.ref("alerts").on("child_removed", snapshot => {
+      const el = document.getElementById(snapshot.key);
+      if (el) el.remove();
+    });
+
+    function markAlertSeen(alertId) {
+      db.ref("alerts").child(alertId).remove();
+    }
+
+    // ---------------- AUTO CLEANUP (5 MIN BACKUP) ----------------
+
+    function cleanOldAlerts() {
+      const now = Date.now();
+      const limit = 5 * 60 * 1000;
+
+      db.ref("alerts").once("value", snap => {
+        snap.forEach(child => {
+          const a = child.val();
+          if (a.timestamp && now - a.timestamp > limit) {
+            db.ref("alerts").child(child.key).remove();
+          }
+        });
+      });
+    }
+
+    setInterval(cleanOldAlerts, 60 * 1000);
+  </script>
+
+</body>
+</html>
