@@ -314,6 +314,16 @@
       box-shadow: 0 8px 25px rgba(76, 201, 240, 0.4);
     }
 
+    .btn-info {
+      background: linear-gradient(135deg, #7209b7 0%, #560bad 100%);
+      box-shadow: 0 5px 20px rgba(114, 9, 183, 0.3);
+    }
+
+    .btn-info:hover {
+      background: linear-gradient(135deg, #560bad 0%, #7209b7 100%);
+      box-shadow: 0 8px 25px rgba(114, 9, 183, 0.4);
+    }
+
     .logout-btn {
       background: linear-gradient(135deg, #f72585 0%, #b5179e 100%);
       padding: 14px 32px;
@@ -480,6 +490,120 @@
       }
     }
 
+    /* Filter Section */
+    .filter-section {
+      background: rgba(26, 35, 53, 0.7);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 25px;
+      border: 1px solid rgba(76, 201, 240, 0.15);
+    }
+
+    .filter-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .filter-header h4 {
+      color: #fff;
+      font-size: 1.2em;
+      margin: 0;
+    }
+
+    .filter-controls {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .filter-label {
+      margin-bottom: 6px;
+      color: #4cc9f0;
+      font-weight: 600;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .filter-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .filter-actions button {
+      padding: 12px 20px;
+      font-size: 14px;
+    }
+
+    .filter-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 15px;
+      align-items: center;
+    }
+
+    .filter-tag {
+      background: rgba(76, 201, 240, 0.15);
+      color: #4cc9f0;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid rgba(76, 201, 240, 0.3);
+    }
+
+    .filter-tag-remove {
+      background: none;
+      border: none;
+      color: #fff;
+      cursor: pointer;
+      font-size: 16px;
+      padding: 0;
+      margin: 0;
+      width: 18px;
+      height: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+    }
+
+    .filter-tag-remove:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .search-box {
+      position: relative;
+      margin-bottom: 15px;
+    }
+
+    .search-box input {
+      padding-left: 50px;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #4cc9f0;
+      font-size: 18px;
+    }
+
     .info-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -554,6 +678,7 @@
 
     .sound-slider {
       flex: 1;
+      -webkit-appearance: none;
       height: 8px;
       border-radius: 4px;
       background: rgba(13, 27, 42, 0.7);
@@ -688,6 +813,38 @@
       flex: 1;
     }
 
+    /* Patient Stats */
+    .patient-stats {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .stat-box {
+      background: rgba(26, 35, 53, 0.7);
+      padding: 15px;
+      border-radius: 12px;
+      border: 1px solid rgba(76, 201, 240, 0.15);
+      flex: 1;
+      min-width: 150px;
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 2em;
+      font-weight: bold;
+      color: #4cc9f0;
+      margin-bottom: 5px;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: #b0b0b0;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
     /* Responsive */
     @media (max-width: 768px) {
       h2 {
@@ -702,7 +859,7 @@
         padding: 24px;
       }
 
-      .info-grid, .form-row, .patient-grid {
+      .info-grid, .form-row, .patient-grid, .filter-controls {
         grid-template-columns: 1fr;
       }
       
@@ -735,6 +892,19 @@
       .sound-slider {
         width: 100%;
       }
+
+      .filter-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .filter-actions {
+        width: 100%;
+      }
+
+      .filter-actions button {
+        flex: 1;
+      }
     }
 
     /* Medical cross pattern background */
@@ -758,7 +928,7 @@
       width: 24px;
       height: 24px;
       background: linear-gradient(135deg, #4cc9f0, #4361ee);
-      mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z'/%3E%3C/svg%3E");
+      mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z'/%3E%3C/svg%3E");
       -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z'/%3E%3C/svg%3E");
       mask-repeat: no-repeat;
       -webkit-mask-repeat: no-repeat;
@@ -776,6 +946,52 @@
       font-weight: 600;
       letter-spacing: 1px;
       text-transform: uppercase;
+    }
+
+    /* Sort Dropdown */
+    .sort-dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .sort-btn {
+      padding: 12px 20px;
+      background: rgba(76, 201, 240, 0.1);
+      border: 1px solid rgba(76, 201, 240, 0.3);
+      color: #4cc9f0;
+    }
+
+    .sort-options {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background: rgba(26, 35, 53, 0.95);
+      border: 1px solid rgba(76, 201, 240, 0.3);
+      border-radius: 8px;
+      padding: 10px 0;
+      min-width: 200px;
+      z-index: 100;
+      display: none;
+    }
+
+    .sort-options.show {
+      display: block;
+    }
+
+    .sort-option {
+      padding: 10px 20px;
+      color: #e0e1dd;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .sort-option:hover {
+      background: rgba(76, 201, 240, 0.1);
+    }
+
+    .sort-option.active {
+      background: rgba(76, 201, 240, 0.2);
+      color: #4cc9f0;
     }
   </style>
 </head>
@@ -821,6 +1037,100 @@
 
       <!-- Patients Tab -->
       <div id="patientsTab" class="tab-content active">
+        <!-- Patient Stats -->
+        <div class="patient-stats">
+          <div class="stat-box">
+            <div class="stat-value" id="totalPatients">0</div>
+            <div class="stat-label">Total Patients</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-value" id="normalPatients">0</div>
+            <div class="stat-label">Normal</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-value" id="warningPatients">0</div>
+            <div class="stat-label">Warning</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-value" id="alertPatients">0</div>
+            <div class="stat-label">Alert</div>
+          </div>
+        </div>
+
+        <!-- Filter Section -->
+        <div class="filter-section">
+          <div class="filter-header">
+            <h4>🔍 Filter Patients</h4>
+            <div class="filter-actions">
+              <button class="btn-info" onclick="resetFilters()">
+                🔄 Reset Filters
+              </button>
+              <button class="btn-success" onclick="loadPatientsList()">
+                📊 Refresh Data
+              </button>
+            </div>
+          </div>
+
+          <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="searchInput" placeholder="Search by Patient ID, Name, or Condition..." 
+                   oninput="applyFilters()">
+          </div>
+
+          <div class="filter-controls">
+            <div class="filter-group">
+              <label class="filter-label">Status</label>
+              <select id="statusFilter" onchange="applyFilters()">
+                <option value="all">All Statuses</option>
+                <option value="normal">Normal</option>
+                <option value="warning">Warning</option>
+                <option value="alert">Alert</option>
+              </select>
+            </div>
+
+            <div class="filter-group">
+              <label class="filter-label">Age Range</label>
+              <div style="display: flex; gap: 10px;">
+                <input type="number" id="ageMin" placeholder="Min" oninput="applyFilters()" style="flex: 1;">
+                <input type="number" id="ageMax" placeholder="Max" oninput="applyFilters()" style="flex: 1;">
+              </div>
+            </div>
+
+            <div class="filter-group">
+              <label class="filter-label">Safe Radius</label>
+              <select id="radiusFilter" onchange="applyFilters()">
+                <option value="all">All Radii</option>
+                <option value="0-50">0-50 meters</option>
+                <option value="51-100">51-100 meters</option>
+                <option value="101-200">101-200 meters</option>
+                <option value="201+">201+ meters</option>
+              </select>
+            </div>
+
+            <div class="filter-group">
+              <label class="filter-label">Sort By</label>
+              <select id="sortBy" onchange="applyFilters()">
+                <option value="id">Patient ID</option>
+                <option value="name">Name</option>
+                <option value="age">Age</option>
+                <option value="status">Status</option>
+                <option value="radius">Safe Radius</option>
+              </select>
+            </div>
+
+            <div class="filter-group">
+              <label class="filter-label">Sort Order</label>
+              <select id="sortOrder" onchange="applyFilters()">
+                <option value="asc">Ascending</option>
+                <option value="desc">Descending</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Active Filters -->
+          <div id="activeFilters" class="filter-tags"></div>
+        </div>
+
         <!-- Add/Edit Patient Form -->
         <div class="card">
           <span class="card-label">Patient Management</span>
@@ -869,7 +1179,12 @@
         <!-- Patient List -->
         <div class="card">
           <span class="card-label">Active Patients</span>
-          <h3><span class="medical-icon"></span> Patient List</h3>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h3><span class="medical-icon"></span> Patient List</h3>
+            <div style="color: #4cc9f0; font-size: 14px;">
+              Showing <span id="showingCount">0</span> of <span id="totalCount">0</span> patients
+            </div>
+          </div>
           <div class="patient-grid" id="patientGrid"></div>
         </div>
       </div>
@@ -985,11 +1300,22 @@
     let currentPatientToDelete = null;
     let refreshInterval = 10000; // 10 seconds
     let alertCleanupInterval = 300000; // 5 minutes
+    let allPatients = []; // Store all patients for filtering
+    let currentFilters = {
+      search: '',
+      status: 'all',
+      ageMin: '',
+      ageMax: '',
+      radius: 'all',
+      sortBy: 'id',
+      sortOrder: 'asc'
+    };
 
     // Initialize on load
     window.addEventListener('load', () => {
       loadSettings();
       setupSoundControls();
+      loadFilterSettings();
     });
 
     // ---------------- TAB NAVIGATION ----------------
@@ -1071,6 +1397,232 @@
       }
     });
 
+    // ---------------- PATIENT FILTERING ----------------
+    function loadFilterSettings() {
+      // Load saved filters from localStorage
+      const savedFilters = localStorage.getItem('patientFilters');
+      if (savedFilters) {
+        currentFilters = JSON.parse(savedFilters);
+        applySavedFilters();
+      }
+    }
+
+    function saveFilterSettings() {
+      localStorage.setItem('patientFilters', JSON.stringify(currentFilters));
+    }
+
+    function applySavedFilters() {
+      document.getElementById('searchInput').value = currentFilters.search;
+      document.getElementById('statusFilter').value = currentFilters.status;
+      document.getElementById('ageMin').value = currentFilters.ageMin;
+      document.getElementById('ageMax').value = currentFilters.ageMax;
+      document.getElementById('radiusFilter').value = currentFilters.radius;
+      document.getElementById('sortBy').value = currentFilters.sortBy;
+      document.getElementById('sortOrder').value = currentFilters.sortOrder;
+      
+      updateActiveFiltersDisplay();
+    }
+
+    function applyFilters() {
+      // Update current filters
+      currentFilters = {
+        search: document.getElementById('searchInput').value.toLowerCase(),
+        status: document.getElementById('statusFilter').value,
+        ageMin: document.getElementById('ageMin').value,
+        ageMax: document.getElementById('ageMax').value,
+        radius: document.getElementById('radiusFilter').value,
+        sortBy: document.getElementById('sortBy').value,
+        sortOrder: document.getElementById('sortOrder').value
+      };
+
+      saveFilterSettings();
+      filterAndDisplayPatients();
+      updateActiveFiltersDisplay();
+    }
+
+    function resetFilters() {
+      currentFilters = {
+        search: '',
+        status: 'all',
+        ageMin: '',
+        ageMax: '',
+        radius: 'all',
+        sortBy: 'id',
+        sortOrder: 'asc'
+      };
+
+      document.getElementById('searchInput').value = '';
+      document.getElementById('statusFilter').value = 'all';
+      document.getElementById('ageMin').value = '';
+      document.getElementById('ageMax').value = '';
+      document.getElementById('radiusFilter').value = 'all';
+      document.getElementById('sortBy').value = 'id';
+      document.getElementById('sortOrder').value = 'asc';
+
+      saveFilterSettings();
+      filterAndDisplayPatients();
+      updateActiveFiltersDisplay();
+    }
+
+    function filterAndDisplayPatients() {
+      if (allPatients.length === 0) return;
+
+      let filtered = [...allPatients];
+
+      // Apply search filter
+      if (currentFilters.search) {
+        filtered = filtered.filter(patient => 
+          patient.id.toLowerCase().includes(currentFilters.search) ||
+          (patient.name && patient.name.toLowerCase().includes(currentFilters.search)) ||
+          (patient.condition && patient.condition.toLowerCase().includes(currentFilters.search))
+        );
+      }
+
+      // Apply status filter
+      if (currentFilters.status !== 'all') {
+        filtered = filtered.filter(patient => 
+          patient.status === currentFilters.status
+        );
+      }
+
+      // Apply age filter
+      if (currentFilters.ageMin) {
+        const minAge = parseInt(currentFilters.ageMin);
+        filtered = filtered.filter(patient => {
+          const age = parseInt(patient.age);
+          return !isNaN(age) && age >= minAge;
+        });
+      }
+
+      if (currentFilters.ageMax) {
+        const maxAge = parseInt(currentFilters.ageMax);
+        filtered = filtered.filter(patient => {
+          const age = parseInt(patient.age);
+          return !isNaN(age) && age <= maxAge;
+        });
+      }
+
+      // Apply radius filter
+      if (currentFilters.radius !== 'all') {
+        filtered = filtered.filter(patient => {
+          const radius = patient.safeRadius || 100;
+          switch(currentFilters.radius) {
+            case '0-50': return radius <= 50;
+            case '51-100': return radius >= 51 && radius <= 100;
+            case '101-200': return radius >= 101 && radius <= 200;
+            case '201+': return radius >= 201;
+            default: return true;
+          }
+        });
+      }
+
+      // Apply sorting
+      filtered.sort((a, b) => {
+        let aValue, bValue;
+
+        switch(currentFilters.sortBy) {
+          case 'id':
+            aValue = a.id.toLowerCase();
+            bValue = b.id.toLowerCase();
+            break;
+          case 'name':
+            aValue = (a.name || '').toLowerCase();
+            bValue = (b.name || '').toLowerCase();
+            break;
+          case 'age':
+            aValue = parseInt(a.age) || 0;
+            bValue = parseInt(b.age) || 0;
+            break;
+          case 'status':
+            // Custom order: alert > warning > normal
+            const statusOrder = { alert: 3, warning: 2, normal: 1 };
+            aValue = statusOrder[a.status] || 0;
+            bValue = statusOrder[b.status] || 0;
+            break;
+          case 'radius':
+            aValue = a.safeRadius || 0;
+            bValue = b.safeRadius || 0;
+            break;
+          default:
+            aValue = a.id.toLowerCase();
+            bValue = b.id.toLowerCase();
+        }
+
+        if (currentFilters.sortOrder === 'desc') {
+          [aValue, bValue] = [bValue, aValue];
+        }
+
+        if (aValue < bValue) return -1;
+        if (aValue > bValue) return 1;
+        return 0;
+      });
+
+      displayPatients(filtered);
+    }
+
+    function updateActiveFiltersDisplay() {
+      const filtersContainer = document.getElementById('activeFilters');
+      const activeFilters = [];
+
+      if (currentFilters.search) {
+        activeFilters.push({
+          label: `Search: ${currentFilters.search}`,
+          remove: () => {
+            document.getElementById('searchInput').value = '';
+            applyFilters();
+          }
+        });
+      }
+
+      if (currentFilters.status !== 'all') {
+        activeFilters.push({
+          label: `Status: ${currentFilters.status}`,
+          remove: () => {
+            document.getElementById('statusFilter').value = 'all';
+            applyFilters();
+          }
+        });
+      }
+
+      if (currentFilters.ageMin || currentFilters.ageMax) {
+        const ageLabel = `Age: ${currentFilters.ageMin || 'Any'} to ${currentFilters.ageMax || 'Any'}`;
+        activeFilters.push({
+          label: ageLabel,
+          remove: () => {
+            document.getElementById('ageMin').value = '';
+            document.getElementById('ageMax').value = '';
+            applyFilters();
+          }
+        });
+      }
+
+      if (currentFilters.radius !== 'all') {
+        activeFilters.push({
+          label: `Radius: ${currentFilters.radius}`,
+          remove: () => {
+            document.getElementById('radiusFilter').value = 'all';
+            applyFilters();
+          }
+        });
+      }
+
+      let html = '';
+      if (activeFilters.length > 0) {
+        html += '<span style="font-size: 13px; color: #b0b0b0; margin-right: 10px;">Active Filters:</span>';
+        activeFilters.forEach(filter => {
+          html += `
+            <div class="filter-tag">
+              ${filter.label}
+              <button class="filter-tag-remove" onclick="${filter.remove}">×</button>
+            </div>
+          `;
+        });
+        html += `<button class="btn-info" onclick="resetFilters()" style="padding: 6px 12px; font-size: 12px;">Clear All</button>`;
+      }
+
+      filtersContainer.innerHTML = html;
+    }
+
     // ---------------- PATIENT CRUD ----------------
     function savePatient() {
       const pid = document.getElementById("pid").value.trim();
@@ -1120,64 +1672,107 @@
 
     function loadPatientsList() {
       db.ref("patients").once("value", snapshot => {
-        const grid = document.getElementById("patientGrid");
-        grid.innerHTML = "";
+        allPatients = [];
 
         if (!snapshot.exists()) {
-          grid.innerHTML = '<div class="empty-state">No patients added yet. Add a patient to begin monitoring.</div>';
-          updatePatientCount(0);
+          displayPatients([]);
+          updatePatientStats(0, 0, 0, 0);
           return;
         }
 
-        let count = 0;
         snapshot.forEach(child => {
-          count++;
           const p = child.val();
-          const patientId = child.key;
-          
-          const statusClass = p.status === 'normal' ? 'status-normal' : 
-                           p.status === 'warning' ? 'status-warning' : 'status-alert';
-
-          const card = document.createElement("div");
-          card.className = "patient-card";
-          card.innerHTML = `
-            <span class="patient-id">${patientId}</span>
-            <div class="patient-name">${p.name}</div>
-            <div class="patient-info">
-              Age: ${p.age}<br>
-              Condition: ${p.condition}<br>
-              Safe Radius: ${p.safeRadius} m<br>
-              Status: <span class="status-badge ${statusClass}">${p.status}</span>
-            </div>
-            
-            ${p.currentLocation ? `
-            <div class="info-box" style="margin-top: 10px;">
-              <strong>📍 Current Location</strong>
-              ${p.currentLocation.place || "Unknown"}<br>
-              Lat: ${p.currentLocation.lat.toFixed(6)}<br>
-              Lon: ${p.currentLocation.lon.toFixed(6)}
-            </div>
-            ` : ''}
-
-            <div class="patient-actions">
-              <button class="btn-success" onclick="editPatient('${patientId}')">
-                ✏️ Edit
-              </button>
-              <button class="btn-primary" onclick="setSafeCenter('${patientId}')">
-                🎯 Set Safe Center
-              </button>
-              <button class="btn-danger" onclick="confirmDelete('${patientId}', '${p.name}')">
-                🗑️ Delete
-              </button>
-            </div>
-          `;
-
-          grid.appendChild(card);
+          allPatients.push({
+            id: child.key,
+            name: p.name || 'Unnamed',
+            age: p.age || 'N/A',
+            condition: p.condition || 'N/A',
+            safeRadius: p.safeRadius || 100,
+            status: p.status || 'normal',
+            currentLocation: p.currentLocation || null,
+            safeCenter: p.safeCenter || null,
+            distance: p.distance || 0,
+            lastUpdated: p.lastUpdated || Date.now()
+          });
         });
 
-        updatePatientCount(count);
+        filterAndDisplayPatients();
         updateLastUpdateTime();
       });
+    }
+
+    function displayPatients(patients) {
+      const grid = document.getElementById("patientGrid");
+      grid.innerHTML = "";
+
+      if (patients.length === 0) {
+        grid.innerHTML = '<div class="empty-state">No patients match your filter criteria. Try adjusting your filters.</div>';
+        updatePatientStats(0, 0, 0, 0);
+        updateCountDisplay(0, allPatients.length);
+        return;
+      }
+
+      patients.forEach(patient => {
+        const statusClass = patient.status === 'normal' ? 'status-normal' : 
+                         patient.status === 'warning' ? 'status-warning' : 'status-alert';
+
+        const card = document.createElement("div");
+        card.className = "patient-card";
+        card.innerHTML = `
+          <span class="patient-id">${patient.id}</span>
+          <div class="patient-name">${patient.name}</div>
+          <div class="patient-info">
+            Age: ${patient.age}<br>
+            Condition: ${patient.condition}<br>
+            Safe Radius: ${patient.safeRadius} m<br>
+            Status: <span class="status-badge ${statusClass}">${patient.status}</span>
+          </div>
+          
+          ${patient.currentLocation ? `
+          <div class="info-box" style="margin-top: 10px;">
+            <strong>📍 Current Location</strong>
+            ${patient.currentLocation.place || "Unknown"}<br>
+            Lat: ${patient.currentLocation.lat ? patient.currentLocation.lat.toFixed(6) : 'N/A'}<br>
+            Lon: ${patient.currentLocation.lon ? patient.currentLocation.lon.toFixed(6) : 'N/A'}
+          </div>
+          ` : ''}
+
+          <div class="patient-actions">
+            <button class="btn-success" onclick="editPatient('${patient.id}')">
+              ✏️ Edit
+            </button>
+            <button class="btn-primary" onclick="setSafeCenter('${patient.id}')">
+              🎯 Set Safe Center
+            </button>
+            <button class="btn-danger" onclick="confirmDelete('${patient.id}', '${patient.name}')">
+              🗑️ Delete
+            </button>
+          </div>
+        `;
+
+        grid.appendChild(card);
+      });
+
+      updatePatientStats(allPatients.length, 
+        allPatients.filter(p => p.status === 'normal').length,
+        allPatients.filter(p => p.status === 'warning').length,
+        allPatients.filter(p => p.status === 'alert').length
+      );
+      
+      updateCountDisplay(patients.length, allPatients.length);
+    }
+
+    function updatePatientStats(total, normal, warning, alert) {
+      document.getElementById('totalPatients').textContent = total;
+      document.getElementById('normalPatients').textContent = normal;
+      document.getElementById('warningPatients').textContent = warning;
+      document.getElementById('alertPatients').textContent = alert;
+      document.getElementById('activePatientsCount').textContent = total;
+    }
+
+    function updateCountDisplay(showing, total) {
+      document.getElementById('showingCount').textContent = showing;
+      document.getElementById('totalCount').textContent = total;
     }
 
     function editPatient(patientId) {
@@ -1469,10 +2064,6 @@
     }
 
     // ---------------- UTILITY FUNCTIONS ----------------
-    function updatePatientCount(count) {
-      document.getElementById("activePatientsCount").textContent = count;
-    }
-
     function updateAlertCounts() {
       db.ref("alerts").once("value", snapshot => {
         const count = snapshot.exists() ? snapshot.numChildren() : 0;
