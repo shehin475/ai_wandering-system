@@ -26,8 +26,65 @@
     }
 
     .container {
-      max-width: 1200px;
+      max-width: 1400px;
       margin: 0 auto;
+    }
+
+    /* Navigation */
+    .nav-tabs {
+      display: flex;
+      background: rgba(26, 35, 53, 0.85);
+      border-radius: 12px;
+      margin-bottom: 30px;
+      overflow: hidden;
+      border: 1px solid rgba(76, 201, 240, 0.15);
+    }
+
+    .nav-tab {
+      padding: 18px 30px;
+      background: transparent;
+      border: none;
+      color: #e0e1dd;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      flex: 1;
+      text-align: center;
+      position: relative;
+    }
+
+    .nav-tab:hover {
+      background: rgba(76, 201, 240, 0.1);
+    }
+
+    .nav-tab.active {
+      background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
+      color: white;
+    }
+
+    .nav-tab.active::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: #4cc9f0;
+    }
+
+    .tab-content {
+      display: none;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     h2 {
@@ -101,7 +158,7 @@
     }
 
     .card:hover {
-      transform: translateY(-8px);
+      transform: translateY(-5px);
       box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
       border-color: rgba(76, 201, 240, 0.3);
     }
@@ -117,7 +174,7 @@
       }
     }
 
-    input {
+    input, select {
       padding: 16px 20px;
       margin: 10px 0;
       width: 100%;
@@ -130,22 +187,42 @@
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
-    input::placeholder {
+    input::placeholder, select::placeholder {
       color: rgba(224, 225, 221, 0.5);
       font-style: italic;
     }
 
-    input:focus {
+    input:focus, select:focus {
       outline: none;
       border-color: #4cc9f0;
       background: rgba(13, 27, 42, 0.9);
       box-shadow: 0 0 0 3px rgba(76, 201, 240, 0.2);
     }
 
+    .form-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-bottom: 15px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-label {
+      margin-bottom: 8px;
+      color: #4cc9f0;
+      font-weight: 600;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
     button {
       padding: 16px 32px;
-      margin: 12px 0;
-      width: 100%;
+      margin: 12px 5px;
       background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
       color: white;
       border: none;
@@ -160,6 +237,10 @@
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       position: relative;
       overflow: hidden;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
     }
 
     button::after {
@@ -197,9 +278,44 @@
       }
     }
 
+    .btn-primary {
+      background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
+    }
+
+    .btn-danger {
+      background: linear-gradient(135deg, #f72585 0%, #b5179e 100%);
+      box-shadow: 0 5px 20px rgba(247, 37, 133, 0.3);
+    }
+
+    .btn-danger:hover {
+      background: linear-gradient(135deg, #b5179e 0%, #f72585 100%);
+      box-shadow: 0 8px 25px rgba(247, 37, 133, 0.4);
+    }
+
+    .btn-warning {
+      background: linear-gradient(135deg, #ffb703 0%, #fb8500 100%);
+      box-shadow: 0 5px 20px rgba(255, 183, 3, 0.3);
+      color: #0d1b2a;
+    }
+
+    .btn-warning:hover {
+      background: linear-gradient(135deg, #fb8500 0%, #ffb703 100%);
+      box-shadow: 0 8px 25px rgba(255, 183, 3, 0.4);
+    }
+
+    .btn-success {
+      background: linear-gradient(135deg, #4cc9f0 0%, #4895ef 100%);
+      box-shadow: 0 5px 20px rgba(76, 201, 240, 0.3);
+      color: #0d1b2a;
+    }
+
+    .btn-success:hover {
+      background: linear-gradient(135deg, #4895ef 0%, #4cc9f0 100%);
+      box-shadow: 0 8px 25px rgba(76, 201, 240, 0.4);
+    }
+
     .logout-btn {
       background: linear-gradient(135deg, #f72585 0%, #b5179e 100%);
-      width: auto;
       padding: 14px 32px;
       margin-bottom: 20px;
       box-shadow: 0 5px 20px rgba(247, 37, 133, 0.3);
@@ -259,23 +375,31 @@
       display: none;
     }
 
-    #patientList {
-      list-style: none;
+    /* Patient List */
+    .patient-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 25px;
+      margin-top: 20px;
     }
 
-    #patientList li {
+    .patient-card {
       background: linear-gradient(135deg, rgba(67, 97, 238, 0.08) 0%, rgba(76, 201, 240, 0.08) 100%);
       padding: 24px;
-      margin-bottom: 18px;
       border-radius: 16px;
       border-left: 6px solid #4361ee;
-      line-height: 1.8;
-      transition: all 0.3s ease;
       border: 1px solid rgba(67, 97, 238, 0.15);
       position: relative;
+      transition: all 0.3s ease;
     }
 
-    #patientList li::before {
+    .patient-card:hover {
+      background: linear-gradient(135deg, rgba(67, 97, 238, 0.12) 0%, rgba(76, 201, 240, 0.12) 100%);
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(67, 97, 238, 0.2);
+    }
+
+    .patient-card::before {
       content: '👤';
       position: absolute;
       top: 24px;
@@ -284,37 +408,36 @@
       opacity: 0.3;
     }
 
-    #patientList li:hover {
-      background: linear-gradient(135deg, rgba(67, 97, 238, 0.12) 0%, rgba(76, 201, 240, 0.12) 100%);
-      transform: translateX(8px);
-      box-shadow: 0 8px 20px rgba(67, 97, 238, 0.2);
-    }
-
-    #patientList li b {
+    .patient-id {
       color: #4cc9f0;
-      font-size: 1.3em;
+      font-size: 1.4em;
+      font-weight: bold;
       display: block;
       margin-bottom: 8px;
     }
 
-    #patientList li button {
-      margin-top: 18px;
-      background: linear-gradient(135deg, #4cc9f0 0%, #4895ef 100%);
-      box-shadow: 0 5px 20px rgba(76, 201, 240, 0.3);
-      color: #0d1b2a;
-      font-weight: 700;
+    .patient-name {
+      font-size: 1.2em;
+      color: #fff;
+      margin-bottom: 5px;
     }
 
-    #patientList li button:hover {
-      background: linear-gradient(135deg, #4895ef 0%, #4cc9f0 100%);
-      box-shadow: 0 8px 25px rgba(76, 201, 240, 0.4);
+    .patient-info {
+      color: #b0b0b0;
+      margin-bottom: 15px;
+      line-height: 1.6;
     }
 
-    #patientList hr {
-      border: none;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(76, 201, 240, 0.3), transparent);
-      margin: 20px 0 0 0;
+    .patient-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .patient-actions button {
+      flex: 1;
+      padding: 12px;
+      font-size: 14px;
     }
 
     .status-badge {
@@ -413,33 +536,83 @@
       border-bottom: 1px solid rgba(76, 201, 240, 0.2);
     }
 
-    @media (max-width: 768px) {
-      h2 {
-        font-size: 1.8em;
-      }
-
-      h3 {
-        font-size: 1.2em;
-      }
-
-      .card {
-        padding: 24px;
-      }
-
-      .info-grid {
-        grid-template-columns: 1fr;
-      }
-      
-      .dashboard-header {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-      
-      .logout-btn {
-        align-self: flex-end;
-      }
+    /* Sound Control Panel */
+    .sound-controls {
+      background: rgba(76, 201, 240, 0.07);
+      padding: 20px;
+      border-radius: 12px;
+      border: 1px solid rgba(76, 201, 240, 0.15);
+      margin-bottom: 20px;
     }
 
+    .sound-control-row {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+
+    .sound-slider {
+      flex: 1;
+      -webkit-appearance: none;
+      height: 8px;
+      border-radius: 4px;
+      background: rgba(13, 27, 42, 0.7);
+      outline: none;
+    }
+
+    .sound-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #4cc9f0;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(76, 201, 240, 0.5);
+    }
+
+    .sound-indicator {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+    }
+
+    .sound-on {
+      background: #4cc9f0;
+      color: #0d1b2a;
+    }
+
+    .sound-off {
+      background: #f72585;
+      color: white;
+    }
+
+    /* Alerts Container */
+    #alertsContainer {
+      max-height: 500px;
+      overflow-y: auto;
+      padding-right: 10px;
+    }
+
+    #alertsContainer::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    #alertsContainer::-webkit-scrollbar-track {
+      background: rgba(13, 27, 42, 0.5);
+      border-radius: 4px;
+    }
+
+    #alertsContainer::-webkit-scrollbar-thumb {
+      background: #4cc9f0;
+      border-radius: 4px;
+    }
+
+    /* Loading Spinner */
     .loading-spinner {
       display: inline-block;
       width: 24px;
@@ -460,6 +633,109 @@
       color: rgba(224, 225, 221, 0.5);
       font-style: italic;
       font-size: 1.1em;
+      grid-column: 1 / -1;
+    }
+
+    /* Modal for delete confirmation */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal {
+      background: rgba(26, 35, 53, 0.95);
+      backdrop-filter: blur(20px);
+      padding: 40px;
+      border-radius: 20px;
+      border: 1px solid rgba(76, 201, 240, 0.3);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+      max-width: 500px;
+      width: 90%;
+      transform: translateY(20px);
+      transition: transform 0.3s ease;
+    }
+
+    .modal-overlay.active .modal {
+      transform: translateY(0);
+    }
+
+    .modal h3 {
+      margin-bottom: 20px;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 15px;
+      margin-top: 30px;
+    }
+
+    .modal-actions button {
+      flex: 1;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      h2 {
+        font-size: 1.8em;
+      }
+
+      h3 {
+        font-size: 1.2em;
+      }
+
+      .card {
+        padding: 24px;
+      }
+
+      .info-grid, .form-row, .patient-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .dashboard-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .logout-btn {
+        align-self: flex-end;
+      }
+
+      .nav-tabs {
+        flex-direction: column;
+      }
+
+      .nav-tab {
+        padding: 15px;
+      }
+
+      .patient-actions {
+        flex-direction: column;
+      }
+
+      .sound-control-row {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .sound-slider {
+        width: 100%;
+      }
     }
 
     /* Medical cross pattern background */
@@ -478,7 +754,6 @@
       z-index: -1;
     }
 
-    /* Medical cross icon for headers */
     .medical-icon {
       display: inline-block;
       width: 24px;
@@ -492,42 +767,6 @@
       -webkit-mask-position: center;
     }
 
-    /* Floating particles */
-    .particles {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: -1;
-    }
-
-    .particle {
-      position: absolute;
-      background: rgba(76, 201, 240, 0.1);
-      border-radius: 50%;
-      animation: float 20s infinite linear;
-    }
-
-    @keyframes float {
-      0% {
-        transform: translateY(0) translateX(0);
-      }
-      25% {
-        transform: translateY(-20px) translateX(10px);
-      }
-      50% {
-        transform: translateY(10px) translateX(-10px);
-      }
-      75% {
-        transform: translateY(-10px) translateX(20px);
-      }
-      100% {
-        transform: translateY(0) translateX(0);
-      }
-    }
-
     /* Card labels */
     .card-label {
       position: absolute;
@@ -539,36 +778,22 @@
       letter-spacing: 1px;
       text-transform: uppercase;
     }
-
-    /* Enable sound button */
-    #enableSoundBtn {
-      background: linear-gradient(135deg, #7209b7 0%, #560bad 100%);
-      margin-bottom: 25px;
-    }
-    
-    #enableSoundBtn:hover {
-      background: linear-gradient(135deg, #560bad 0%, #7209b7 100%);
-    }
-
-    /* Acknowledge button in alerts */
-    .ack-btn {
-      background: linear-gradient(135deg, #4cc9f0 0%, #4361ee 100%);
-      width: auto;
-      padding: 12px 24px;
-      margin-top: 10px;
-      font-size: 14px;
-    }
-    
-    .ack-btn:hover {
-      background: linear-gradient(135deg, #4361ee 0%, #4cc9f0 100%);
-    }
   </style>
 </head>
 
 <body>
 
-  <!-- Floating particles for background -->
-  <div class="particles" id="particles"></div>
+  <!-- Modal for delete confirmation -->
+  <div class="modal-overlay" id="deleteModal">
+    <div class="modal">
+      <h3>⚠️ Delete Patient</h3>
+      <p id="deleteModalText">Are you sure you want to delete this patient? This action cannot be undone.</p>
+      <div class="modal-actions">
+        <button class="btn-danger" id="confirmDeleteBtn">Delete</button>
+        <button class="btn-primary" onclick="closeModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
 
   <div class="container">
 
@@ -588,31 +813,146 @@
         <button class="logout-btn" onclick="logout()">Logout</button>
       </div>
 
-      <!-- PATIENT FORM -->
-      <div class="card">
-        <span class="card-label">Patient Management</span>
-        <h3><span class="medical-icon"></span> Add / Update Patient</h3>
-        <input id="pid" placeholder="Patient ID (e.g. patient_001)">
-        <input id="pname" placeholder="Patient Name">
-        <input id="page" placeholder="Age">
-        <input id="pcondition" placeholder="Condition">
-        <input id="pradius" placeholder="Safe Radius (meters)">
-        <button onclick="savePatient()">Save / Update Patient</button>
+      <!-- Navigation Tabs -->
+      <div class="nav-tabs">
+        <button class="nav-tab active" onclick="switchTab('patients')">🏥 Patients</button>
+        <button class="nav-tab" onclick="switchTab('alerts')">🚨 Alerts</button>
+        <button class="nav-tab" onclick="switchTab('settings')">⚙️ Settings</button>
       </div>
 
-      <!-- PATIENT LIST -->
-      <div class="card">
-        <span class="card-label">Monitoring</span>
-        <h3><span class="medical-icon"></span> Patient List</h3>
-        <ul id="patientList"></ul>
+      <!-- Patients Tab -->
+      <div id="patientsTab" class="tab-content active">
+        <!-- Add/Edit Patient Form -->
+        <div class="card">
+          <span class="card-label">Patient Management</span>
+          <h3><span class="medical-icon"></span> Add / Update Patient</h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Patient ID</label>
+              <input id="pid" placeholder="e.g. patient_001">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Patient Name</label>
+              <input id="pname" placeholder="Full name">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Age</label>
+              <input id="page" placeholder="Age" type="number">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Condition</label>
+              <input id="pcondition" placeholder="Medical condition">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Safe Radius (meters)</label>
+              <input id="pradius" placeholder="e.g. 100" type="number">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Status</label>
+              <select id="pstatus">
+                <option value="normal">Normal</option>
+                <option value="warning">Warning</option>
+                <option value="alert">Alert</option>
+              </select>
+            </div>
+          </div>
+          <div style="display: flex; gap: 15px; margin-top: 20px;">
+            <button class="btn-primary" onclick="savePatient()">💾 Save Patient</button>
+            <button class="btn-warning" onclick="clearForm()">🗑️ Clear Form</button>
+            <button class="btn-success" onclick="loadPatientsList()">🔄 Refresh List</button>
+          </div>
+        </div>
+
+        <!-- Patient List -->
+        <div class="card">
+          <span class="card-label">Active Patients</span>
+          <h3><span class="medical-icon"></span> Patient List</h3>
+          <div class="patient-grid" id="patientGrid"></div>
+        </div>
       </div>
 
-      <!-- ALERTS -->
-      <div class="card">
-        <span class="card-label">Alerts</span>
-        <h3><span class="medical-icon"></span> Live Alerts</h3>
-        <button id="enableSoundBtn">🔔 Enable Alert Sound</button>
-        <div id="alerts"></div>
+      <!-- Alerts Tab -->
+      <div id="alertsTab" class="tab-content">
+        <div class="card">
+          <span class="card-label">Alert System</span>
+          <h3><span class="medical-icon"></span> Alert Settings</h3>
+          <div class="sound-controls">
+            <div class="sound-control-row">
+              <button id="soundToggleBtn" class="btn-primary" style="width: auto;">
+                🔔 Enable Alert Sound
+              </button>
+              <span id="soundStatus" class="sound-indicator sound-off">OFF</span>
+            </div>
+            <div class="sound-control-row">
+              <label class="form-label">Sound Volume</label>
+              <input type="range" min="0" max="1" step="0.1" value="0.5" 
+                     class="sound-slider" id="soundVolume">
+              <span id="volumeValue">50%</span>
+            </div>
+            <div class="sound-control-row">
+              <button class="btn-success" onclick="testSound()" style="width: auto;">
+                🔊 Test Sound
+              </button>
+              <button class="btn-warning" onclick="clearAllAlerts()" style="width: auto;">
+                🗑️ Clear All Alerts
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <span class="card-label">Live Alerts</span>
+          <h3><span class="medical-icon"></span> Recent Alerts</h3>
+          <div id="alertsContainer">
+            <div id="alerts"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Settings Tab -->
+      <div id="settingsTab" class="tab-content">
+        <div class="card">
+          <span class="card-label">System Settings</span>
+          <h3><span class="medical-icon"></span> Dashboard Settings</h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Auto-refresh Interval (seconds)</label>
+              <input type="number" id="refreshInterval" value="10" min="5" max="300">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Alert Retention (minutes)</label>
+              <input type="number" id="alertRetention" value="5" min="1" max="60">
+            </div>
+          </div>
+          <button class="btn-primary" onclick="saveSettings()">💾 Save Settings</button>
+        </div>
+
+        <div class="card">
+          <span class="card-label">System Info</span>
+          <h3><span class="medical-icon"></span> System Status</h3>
+          <div class="info-grid">
+            <div class="info-box">
+              <strong>📊 Active Patients</strong>
+              <span id="activePatientsCount">0</span>
+            </div>
+            <div class="info-box">
+              <strong>🚨 Active Alerts</strong>
+              <span id="activeAlertsCount">0</span>
+            </div>
+            <div class="info-box">
+              <strong>🕒 Last Update</strong>
+              <span id="lastUpdateTime">Never</span>
+            </div>
+            <div class="info-box">
+              <strong>🔗 Connection</strong>
+              <span id="connectionStatus" style="color: #4cc9f0;">Connected</span>
+            </div>
+          </div>
+        </div>
       </div>
 
     </div>
@@ -624,7 +964,7 @@
   </audio>
 
   <script>
-    // 🔴 REPLACE WITH YOUR FIREBASE CONFIG
+    // Firebase Configuration
     const firebaseConfig = {
       apiKey: "AIzaSyAoR0vhcrxB3nw39ncqLJfmMET7ufokn1A",
       authDomain: "ai-wandering-system.firebaseapp.com",
@@ -641,37 +981,45 @@
     const auth = firebase.auth();
     const db = firebase.database();
 
-    // Create floating particles
-    function createParticles() {
-      const particlesContainer = document.getElementById('particles');
-      for (let i = 0; i < 20; i++) {
-        const particle = document.createElement('div');
-        particle.classList.add('particle');
-        const size = Math.random() * 6 + 2;
-        const posX = Math.random() * 100;
-        const posY = Math.random() * 100;
-        const delay = Math.random() * 20;
-        
-        particle.style.width = `${size}px`;
-        particle.style.height = `${size}px`;
-        particle.style.left = `${posX}%`;
-        particle.style.top = `${posY}%`;
-        particle.style.animationDelay = `${delay}s`;
-        
-        particlesContainer.appendChild(particle);
+    // Global variables
+    let soundEnabled = false;
+    let currentPatientToDelete = null;
+    let refreshInterval = 10000; // 10 seconds
+    let alertCleanupInterval = 300000; // 5 minutes
+
+    // Initialize on load
+    window.addEventListener('load', () => {
+      loadSettings();
+      setupSoundControls();
+    });
+
+    // ---------------- TAB NAVIGATION ----------------
+    function switchTab(tabName) {
+      // Update active tab button
+      document.querySelectorAll('.nav-tab').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      document.querySelector(`.nav-tab[onclick*="${tabName}"]`).classList.add('active');
+
+      // Show selected tab content
+      document.querySelectorAll('.tab-content').forEach(content => {
+        content.classList.remove('active');
+      });
+      document.getElementById(`${tabName}Tab`).classList.add('active');
+
+      // Refresh data for the tab
+      if (tabName === 'patients') {
+        loadPatientsList();
+      } else if (tabName === 'alerts') {
+        updateAlertCounts();
       }
     }
 
-    // Initialize particles on load
-    window.addEventListener('load', createParticles);
-
     // ---------------- AUTH ----------------
-
     function login() {
       const email = document.getElementById("email").value;
       const password = document.getElementById("password").value;
 
-      // Add loading state to button
       const loginBtn = document.querySelector('#loginSection button');
       const originalText = loginBtn.textContent;
       loginBtn.innerHTML = '<span class="loading-spinner"></span> Authenticating...';
@@ -679,31 +1027,35 @@
 
       auth.signInWithEmailAndPassword(email, password)
         .catch(err => {
-          alert(err.message);
+          alert("Login failed: " + err.message);
           loginBtn.textContent = originalText;
           loginBtn.disabled = false;
         });
     }
 
     function logout() {
-      const logoutBtn = document.querySelector('.logout-btn');
-      const originalText = logoutBtn.textContent;
-      logoutBtn.innerHTML = '<span class="loading-spinner"></span> Logging out...';
-      logoutBtn.disabled = true;
-      
-      setTimeout(() => {
-        auth.signOut();
-      }, 500);
+      if (confirm("Are you sure you want to logout?")) {
+        const logoutBtn = document.querySelector('.logout-btn');
+        const originalText = logoutBtn.textContent;
+        logoutBtn.innerHTML = '<span class="loading-spinner"></span> Logging out...';
+        logoutBtn.disabled = true;
+        
+        setTimeout(() => {
+          auth.signOut();
+        }, 500);
+      }
     }
 
     auth.onAuthStateChanged(user => {
       if (user) {
         document.getElementById("loginSection").classList.add("hidden");
         document.getElementById("dashboardSection").classList.remove("hidden");
-        loadPatients();
+        loadPatientsList();
+        startAutoRefresh();
       } else {
         document.getElementById("loginSection").classList.remove("hidden");
         document.getElementById("dashboardSection").classList.add("hidden");
+        stopAutoRefresh();
       }
       
       // Reset button states
@@ -721,104 +1073,176 @@
     });
 
     // ---------------- PATIENT CRUD ----------------
-
     function savePatient() {
-      const pid = document.getElementById("pid").value;
+      const pid = document.getElementById("pid").value.trim();
+      const name = document.getElementById("pname").value.trim();
+      const age = document.getElementById("page").value;
+      const condition = document.getElementById("pcondition").value.trim();
+      const radius = document.getElementById("pradius").value;
+      const status = document.getElementById("pstatus").value;
 
       if (!pid) {
-        alert("Patient ID required");
+        alert("Please enter a Patient ID");
+        return;
+      }
+      if (!name) {
+        alert("Please enter a Patient Name");
         return;
       }
 
       const data = {
-        name: document.getElementById("pname").value,
-        age: document.getElementById("page").value,
-        condition: document.getElementById("pcondition").value,
-        safeRadius: parseFloat(document.getElementById("pradius").value),
-        status: "normal"
+        name: name,
+        age: age || "N/A",
+        condition: condition || "N/A",
+        safeRadius: radius ? parseFloat(radius) : 100,
+        status: status,
+        lastUpdated: Date.now()
       };
 
-      const saveBtn = document.querySelector('.card:first-of-type button');
+      const saveBtn = document.querySelector('.btn-primary');
       const originalText = saveBtn.textContent;
       saveBtn.innerHTML = '<span class="loading-spinner"></span> Saving...';
       saveBtn.disabled = true;
 
       db.ref("patients/" + pid).set(data)
         .then(() => {
-          alert("Patient saved / updated");
-          saveBtn.textContent = originalText;
-          saveBtn.disabled = false;
-          
-          // Clear form
-          document.getElementById("pid").value = '';
-          document.getElementById("pname").value = '';
-          document.getElementById("page").value = '';
-          document.getElementById("pcondition").value = '';
-          document.getElementById("pradius").value = '';
+          alert("✅ Patient saved successfully!");
+          clearForm();
+          loadPatientsList();
         })
         .catch(err => {
-          alert(err.message);
+          alert("❌ Error: " + err.message);
+        })
+        .finally(() => {
           saveBtn.textContent = originalText;
           saveBtn.disabled = false;
         });
     }
 
-    function loadPatients() {
-      db.ref("patients").on("value", snapshot => {
-        const list = document.getElementById("patientList");
-        list.innerHTML = "";
+    function loadPatientsList() {
+      db.ref("patients").once("value", snapshot => {
+        const grid = document.getElementById("patientGrid");
+        grid.innerHTML = "";
 
         if (!snapshot.exists()) {
-          list.innerHTML = '<div class="empty-state">No patients added yet. Add a patient to begin monitoring.</div>';
+          grid.innerHTML = '<div class="empty-state">No patients added yet. Add a patient to begin monitoring.</div>';
+          updatePatientCount(0);
           return;
         }
 
+        let count = 0;
         snapshot.forEach(child => {
+          count++;
           const p = child.val();
-          const li = document.createElement("li");
-
-          const time = p.lastUpdated
-            ? new Date(p.lastUpdated).toLocaleTimeString()
-            : "N/A";
-
+          const patientId = child.key;
+          
           const statusClass = p.status === 'normal' ? 'status-normal' : 
-                             p.status === 'warning' ? 'status-warning' : 'status-alert';
+                           p.status === 'warning' ? 'status-warning' : 'status-alert';
 
-          li.innerHTML = `
-            <b>${child.key}</b> - ${p.name} (Age: ${p.age})<br>
-            Condition: ${p.condition}<br>
-            Status: <span class="status-badge ${statusClass}">${p.status}</span><br>
-
-            <div class="info-grid">
-              <div class="info-box">
-                <strong>📍 Current Location</strong>
-                ${p.currentLocation?.place || "Unknown"}<br>
-                Lat: ${p.currentLocation?.lat || "N/A"}<br>
-                Lon: ${p.currentLocation?.lon || "N/A"}
-              </div>
-
-              <div class="info-box">
-                <strong>🎯 Safe Center</strong>
-                Lat: ${p.safeCenter?.lat || "N/A"}<br>
-                Lon: ${p.safeCenter?.lon || "N/A"}
-              </div>
-
-              <div class="info-box">
-                <strong>📏 Safety Metrics</strong>
-                Distance: ${p.distance || 0} m<br>
-                Safe Radius: ${p.safeRadius} m
-              </div>
+          const card = document.createElement("div");
+          card.className = "patient-card";
+          card.innerHTML = `
+            <span class="patient-id">${patientId}</span>
+            <div class="patient-name">${p.name}</div>
+            <div class="patient-info">
+              Age: ${p.age}<br>
+              Condition: ${p.condition}<br>
+              Safe Radius: ${p.safeRadius} m<br>
+              Status: <span class="status-badge ${statusClass}">${p.status}</span>
             </div>
+            
+            ${p.currentLocation ? `
+            <div class="info-box" style="margin-top: 10px;">
+              <strong>📍 Current Location</strong>
+              ${p.currentLocation.place || "Unknown"}<br>
+              Lat: ${p.currentLocation.lat.toFixed(6)}<br>
+              Lon: ${p.currentLocation.lon.toFixed(6)}
+            </div>
+            ` : ''}
 
-            <button onclick="setSafeCenter('${child.key}')">
-              Set Safe Center to Current Location
-            </button>
-            <hr>
+            <div class="patient-actions">
+              <button class="btn-success" onclick="editPatient('${patientId}')">
+                ✏️ Edit
+              </button>
+              <button class="btn-primary" onclick="setSafeCenter('${patientId}')">
+                🎯 Set Safe Center
+              </button>
+              <button class="btn-danger" onclick="confirmDelete('${patientId}', '${p.name}')">
+                🗑️ Delete
+              </button>
+            </div>
           `;
 
-          list.appendChild(li);
+          grid.appendChild(card);
         });
+
+        updatePatientCount(count);
+        updateLastUpdateTime();
       });
+    }
+
+    function editPatient(patientId) {
+      db.ref("patients/" + patientId).once("value", snapshot => {
+        const p = snapshot.val();
+        if (p) {
+          document.getElementById("pid").value = patientId;
+          document.getElementById("pname").value = p.name || "";
+          document.getElementById("page").value = p.age || "";
+          document.getElementById("pcondition").value = p.condition || "";
+          document.getElementById("pradius").value = p.safeRadius || "";
+          document.getElementById("pstatus").value = p.status || "normal";
+          
+          // Scroll to form
+          document.getElementById("patientsTab").scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    }
+
+    function confirmDelete(patientId, patientName) {
+      currentPatientToDelete = patientId;
+      document.getElementById("deleteModalText").textContent = 
+        `Are you sure you want to delete patient "${patientName}" (${patientId})? This action cannot be undone.`;
+      document.getElementById("deleteModal").classList.add("active");
+    }
+
+    function deletePatient() {
+      if (!currentPatientToDelete) return;
+
+      const deleteBtn = document.getElementById("confirmDeleteBtn");
+      const originalText = deleteBtn.textContent;
+      deleteBtn.innerHTML = '<span class="loading-spinner"></span> Deleting...';
+      deleteBtn.disabled = true;
+
+      db.ref("patients/" + currentPatientToDelete).remove()
+        .then(() => {
+          alert("✅ Patient deleted successfully!");
+          closeModal();
+          loadPatientsList();
+        })
+        .catch(err => {
+          alert("❌ Error deleting patient: " + err.message);
+        })
+        .finally(() => {
+          deleteBtn.textContent = originalText;
+          deleteBtn.disabled = false;
+          currentPatientToDelete = null;
+        });
+    }
+
+    function closeModal() {
+      document.getElementById("deleteModal").classList.remove("active");
+      currentPatientToDelete = null;
+    }
+
+    function clearForm() {
+      if (confirm("Clear the form?")) {
+        document.getElementById("pid").value = "";
+        document.getElementById("pname").value = "";
+        document.getElementById("page").value = "";
+        document.getElementById("pcondition").value = "";
+        document.getElementById("pradius").value = "";
+        document.getElementById("pstatus").value = "normal";
+      }
     }
 
     function setSafeCenter(patientId) {
@@ -838,38 +1262,82 @@
         };
 
         patientRef.child("safeCenter").set(center)
-          .then(() => alert("✅ Safe center updated"))
-          .catch(err => alert(err.message));
+          .then(() => alert("✅ Safe center updated to current location"))
+          .catch(err => alert("❌ Error: " + err.message));
       });
     }
 
-    // ---------------- ALERTS ----------------
+    // ---------------- ALERT SYSTEM ----------------
+    function setupSoundControls() {
+      const alertSound = document.getElementById("alertSound");
+      const volumeSlider = document.getElementById("soundVolume");
+      const soundToggleBtn = document.getElementById("soundToggleBtn");
+      const soundStatus = document.getElementById("soundStatus");
+      const volumeValue = document.getElementById("volumeValue");
 
-    let soundEnabled = false;
-    const alertSound = document.getElementById("alertSound");
+      // Load saved settings
+      const savedVolume = localStorage.getItem('alertVolume') || 0.5;
+      const savedSoundEnabled = localStorage.getItem('soundEnabled') === 'true';
 
-    document.getElementById("enableSoundBtn").addEventListener("click", () => {
-      const btn = document.getElementById("enableSoundBtn");
-      const originalText = btn.textContent;
-      btn.innerHTML = '<span class="loading-spinner"></span> Enabling...';
-      btn.disabled = true;
-      
-      alertSound.play().then(() => {
-        alertSound.pause();
-        alertSound.currentTime = 0;
-        soundEnabled = true;
-        btn.textContent = '✅ Alert Sound Enabled';
-        btn.style.background = 'linear-gradient(135deg, #4cc9f0 0%, #4361ee 100%)';
-        setTimeout(() => {
-          btn.textContent = originalText;
-          btn.disabled = false;
-        }, 2000);
-      }).catch(err => {
-        console.error("Audio unlock failed", err);
-        btn.textContent = '❌ Enable Failed - Click Again';
-        btn.disabled = false;
+      alertSound.volume = savedVolume;
+      volumeSlider.value = savedVolume;
+      volumeValue.textContent = Math.round(savedVolume * 100) + '%';
+
+      soundEnabled = savedSoundEnabled;
+      updateSoundUI();
+
+      // Volume slider
+      volumeSlider.addEventListener('input', (e) => {
+        const volume = parseFloat(e.target.value);
+        alertSound.volume = volume;
+        volumeValue.textContent = Math.round(volume * 100) + '%';
+        localStorage.setItem('alertVolume', volume);
       });
-    });
+
+      // Toggle button
+      soundToggleBtn.addEventListener('click', () => {
+        soundEnabled = !soundEnabled;
+        localStorage.setItem('soundEnabled', soundEnabled);
+        updateSoundUI();
+        
+        if (soundEnabled) {
+          // Try to play sound to enable audio context
+          alertSound.play().then(() => {
+            alertSound.pause();
+            alertSound.currentTime = 0;
+          }).catch(err => {
+            console.log("Audio context activation needed");
+          });
+        }
+      });
+    }
+
+    function updateSoundUI() {
+      const soundToggleBtn = document.getElementById("soundToggleBtn");
+      const soundStatus = document.getElementById("soundStatus");
+
+      if (soundEnabled) {
+        soundToggleBtn.innerHTML = '🔔 Sound ON';
+        soundToggleBtn.classList.add('btn-success');
+        soundToggleBtn.classList.remove('btn-primary');
+        soundStatus.textContent = 'ON';
+        soundStatus.className = 'sound-indicator sound-on';
+      } else {
+        soundToggleBtn.innerHTML = '🔕 Sound OFF';
+        soundToggleBtn.classList.remove('btn-success');
+        soundToggleBtn.classList.add('btn-primary');
+        soundStatus.textContent = 'OFF';
+        soundStatus.className = 'sound-indicator sound-off';
+      }
+    }
+
+    function testSound() {
+      const alertSound = document.getElementById("alertSound");
+      alertSound.currentTime = 0;
+      alertSound.play().catch(err => {
+        alert("Please enable sound first by clicking the 'Enable Alert Sound' button");
+      });
+    }
 
     const alertsDiv = document.getElementById("alerts");
 
@@ -880,8 +1348,11 @@
       // Prevent duplicate UI
       if (document.getElementById(alertId)) return;
 
+      // Play sound if enabled
       if (soundEnabled) {
-        alertSound.play();
+        const alertSound = document.getElementById("alertSound");
+        alertSound.currentTime = 0;
+        alertSound.play().catch(() => {});
       }
 
       const div = document.createElement("div");
@@ -893,30 +1364,100 @@
         <b>Patient:</b> ${alert.patientId}<br>
         <b>Distance:</b> ${alert.distance} m<br>
         <b>Time Outside:</b> ${alert.timeOutside} min<br>
+        <b>Location:</b> ${alert.location || 'Unknown'}<br>
         <small>${new Date(alert.timestamp).toLocaleString()}</small><br><br>
-        <button class="ack-btn" onclick="markAlertSeen('${alertId}')">
-          Acknowledge Alert
-        </button>
+        <div style="display: flex; gap: 10px;">
+          <button class="btn-primary" onclick="markAlertSeen('${alertId}')">
+            ✅ Acknowledge
+          </button>
+          <button class="btn-success" onclick="viewPatientDetails('${alert.patientId}')">
+            👁️ View Patient
+          </button>
+        </div>
       `;
 
       alertsDiv.prepend(div);
+      updateAlertCounts();
+      switchTab('alerts'); // Auto-switch to alerts tab on new alert
     });
 
-    // Remove alert UI when deleted in Firebase
     db.ref("alerts").on("child_removed", snapshot => {
       const el = document.getElementById(snapshot.key);
       if (el) el.remove();
+      updateAlertCounts();
     });
 
     function markAlertSeen(alertId) {
       db.ref("alerts").child(alertId).remove();
     }
 
-    // ---------------- AUTO CLEANUP (5 MIN BACKUP) ----------------
+    function clearAllAlerts() {
+      if (confirm("Clear all alerts?")) {
+        db.ref("alerts").remove()
+          .then(() => {
+            alertsDiv.innerHTML = '<div class="empty-state">No active alerts</div>';
+            updateAlertCounts();
+          });
+      }
+    }
+
+    function viewPatientDetails(patientId) {
+      editPatient(patientId);
+      switchTab('patients');
+    }
+
+    // ---------------- SETTINGS ----------------
+    function loadSettings() {
+      const savedInterval = localStorage.getItem('refreshInterval');
+      const savedRetention = localStorage.getItem('alertRetention');
+
+      if (savedInterval) {
+        refreshInterval = parseInt(savedInterval) * 1000;
+        document.getElementById("refreshInterval").value = savedInterval;
+      }
+
+      if (savedRetention) {
+        alertCleanupInterval = parseInt(savedRetention) * 60000;
+        document.getElementById("alertRetention").value = savedRetention;
+      }
+    }
+
+    function saveSettings() {
+      const interval = document.getElementById("refreshInterval").value;
+      const retention = document.getElementById("alertRetention").value;
+
+      localStorage.setItem('refreshInterval', interval);
+      localStorage.setItem('alertRetention', retention);
+
+      refreshInterval = parseInt(interval) * 1000;
+      alertCleanupInterval = parseInt(retention) * 60000;
+
+      alert("✅ Settings saved!");
+      stopAutoRefresh();
+      startAutoRefresh();
+    }
+
+    // ---------------- AUTO REFRESH ----------------
+    let refreshTimer = null;
+
+    function startAutoRefresh() {
+      if (refreshTimer) clearInterval(refreshTimer);
+      refreshTimer = setInterval(() => {
+        loadPatientsList();
+        cleanOldAlerts();
+      }, refreshInterval);
+    }
+
+    function stopAutoRefresh() {
+      if (refreshTimer) {
+        clearInterval(refreshTimer);
+        refreshTimer = null;
+      }
+    }
 
     function cleanOldAlerts() {
       const now = Date.now();
-      const limit = 5 * 60 * 1000;
+      const limit = alertCleanupInterval;
 
       db.ref("alerts").once("value", snap => {
         snap.forEach(child => {
@@ -928,7 +1469,38 @@
       });
     }
 
-    setInterval(cleanOldAlerts, 60 * 1000);
+    // ---------------- UTILITY FUNCTIONS ----------------
+    function updatePatientCount(count) {
+      document.getElementById("activePatientsCount").textContent = count;
+    }
+
+    function updateAlertCounts() {
+      db.ref("alerts").once("value", snapshot => {
+        const count = snapshot.exists() ? snapshot.numChildren() : 0;
+        document.getElementById("activeAlertsCount").textContent = count;
+      });
+    }
+
+    function updateLastUpdateTime() {
+      document.getElementById("lastUpdateTime").textContent = 
+        new Date().toLocaleTimeString();
+    }
+
+    // Initialize delete modal
+    document.getElementById("confirmDeleteBtn").addEventListener("click", deletePatient);
+    document.getElementById("deleteModal").addEventListener("click", function(e) {
+      if (e.target === this) closeModal();
+    });
+
+    // Close modal with Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeModal();
+    });
+
+    // Initialize
+    updateAlertCounts();
+    setInterval(updateAlertCounts, 5000);
+    setInterval(cleanOldAlerts, 60000);
   </script>
 
 </body>
